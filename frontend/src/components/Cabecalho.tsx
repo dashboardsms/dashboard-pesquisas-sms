@@ -1,6 +1,7 @@
 import { Microscope } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { formatarData } from '../lib/formatacao.ts'
+import { ROTA_PAINEL } from '../lib/rotas.ts'
 
 interface CabecalhoProps {
   atualizadoEm?: string
@@ -13,7 +14,7 @@ export function Cabecalho({ atualizadoEm, children }: CabecalhoProps) {
     <header className="z-30 border-b-4 border-destaque bg-marca-600 text-white shadow-md md:sticky md:top-0">
       <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-8 gap-y-3 px-4 py-3 sm:px-6">
         <a
-          href="/"
+          href={ROTA_PAINEL}
           className="flex items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
           <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/15">

@@ -54,6 +54,16 @@ A senha fica guardada só na Cloudflare: não vai para o GitHub e continua valen
 3. Informe a senha e selecione **Publicar**.
 4. Abra o endereço sem `/importar`: o painel já mostra os novos dados.
 
+## 5. Publicar o painel também no GitHub Pages
+
+O workflow `.github/workflows/deploy-pages.yml` publica o painel em <https://heldersantosufg.github.io/dashboard-pesquisas-sms/> a cada push na `main` que mexa em `frontend/`. O Pages só hospeda o site; os dados continuam vindo da API do Worker da Cloudflare.
+
+1. Faça os passos 1 a 3 e copie o endereço do Worker (por exemplo, `https://dashboard-pesquisas-sms.SEU-SUBDOMINIO.workers.dev`).
+2. No GitHub, abra o repositório e vá em *Settings → Secrets and variables → Actions → Variables → New repository variable*. Use o nome `API_URL` e, como valor, o endereço do Worker, sem barra no final.
+3. Em *Actions → Deploy frontend to GitHub Pages*, selecione **Run workflow** para publicar com o novo endereço.
+
+O Worker só aceita chamadas de outros domínios listados em `ORIGENS_PERMITIDAS` (`frontend/wrangler.jsonc`), que já inclui `https://heldersantosufg.github.io`. Sem a variável `API_URL`, o painel no Pages abre, mas mostra "Nenhuma planilha foi importada ainda". A importação também funciona pelo Pages (`/dashboard-pesquisas-sms/importar`), com a mesma senha.
+
 ## Rotina
 
 - **Atualizar os dados:** repita o passo 4 com a planilha nova. Cada importação **substitui** todos os dados publicados, então a planilha deve conter todas as pesquisas que devem aparecer (em uma ou mais abas com o cabeçalho do modelo).

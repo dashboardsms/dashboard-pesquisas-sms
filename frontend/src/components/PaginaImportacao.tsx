@@ -13,6 +13,7 @@ import { useState, type FormEvent, type ReactNode } from 'react'
 import { publicarPesquisas } from '../data/api.ts'
 import { useBaseDePesquisas } from '../hooks/useBaseDePesquisas.ts'
 import { formatarData, formatarNumero, pluralizar } from '../lib/formatacao.ts'
+import { ROTA_PAINEL } from '../lib/rotas.ts'
 import { converterPlanilha, type GrupoAvisos, type ResultadoImportacao } from '../planilha/converterPlanilha.ts'
 import { COLUNAS, type UsoColuna } from '../planilha/estrutura.ts'
 import { lerPlanilha } from '../planilha/lerPlanilha.ts'
@@ -84,7 +85,7 @@ export function PaginaImportacao() {
     <div className="flex min-h-dvh flex-col">
       <Cabecalho atualizadoEm={atual?.atualizadoEm}>
         <a
-          href="/"
+          href={ROTA_PAINEL}
           className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           <ArrowLeft className="size-4" aria-hidden />
@@ -207,7 +208,7 @@ export function PaginaImportacao() {
                 <Alerta tipo="sucesso">
                   Dados publicados em {formatarData(publicacao.atualizadoEm)}:{' '}
                   {pluralizar(publicacao.pesquisas, 'pesquisa', 'pesquisas')}.{' '}
-                  <a href="/" className="font-semibold underline underline-offset-2">
+                  <a href={ROTA_PAINEL} className="font-semibold underline underline-offset-2">
                     Ver o painel atualizado
                   </a>
                 </Alerta>

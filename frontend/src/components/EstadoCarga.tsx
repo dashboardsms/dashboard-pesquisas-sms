@@ -1,4 +1,5 @@
 import { FileSpreadsheet, LoaderCircle, TriangleAlert } from 'lucide-react'
+import { ROTA_IMPORTACAO } from '../lib/rotas.ts'
 
 interface EstadoCargaProps {
   status: 'carregando' | 'erro' | 'vazia'
@@ -27,7 +28,7 @@ export function EstadoCarga({ status }: EstadoCargaProps) {
           <FileSpreadsheet className="size-8 text-neutral-400" aria-hidden />
           <p>Nenhuma planilha foi importada ainda.</p>
           <a
-            href="/importar"
+            href={ROTA_IMPORTACAO}
             className="rounded-md bg-marca-500 px-4 py-2 text-sm font-medium text-white hover:bg-marca-550 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-450"
           >
             Importar planilha

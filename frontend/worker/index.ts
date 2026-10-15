@@ -5,6 +5,8 @@ interface Env {
   DADOS: KVNamespace
   /** Senha exigida para publicar uma nova base (secret configurado no painel da Cloudflare). */
   SENHA_IMPORTACAO?: string
+  /** Sites de outro domínio que podem usar a API (ex.: o painel no GitHub Pages), separados por vírgula. */
+  ORIGENS_PERMITIDAS?: string
 }
 
 const CHAVE_BASE = 'base'
@@ -12,14 +14,35 @@ const LIMITE_BYTES = 5_000_000
 
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url)
-    if (pathname !== '/api/dados') return json({ erro: 'Rota não encontrada.' }, 404)
-
-    if (request.method === 'GET') return obterBase(env)
-    if (request.method === 'PUT') return publicarBase(request, env)
-    return json({ erro: 'Método não permitido.' }, 405, { Allow: 'GET, PUT' })
+    return liberarOrigem(request, env, await responder(request, env))
   },
 } satisfies ExportedHandler<Env>
+
+async function responder(request: Request, env: Env) {
+  const { pathname } = new URL(request.url)
+  if (pathname !== '/api/dados') return json({ erro: 'Rota não encontrada.' }, 404)
+
+  if (request.method === 'GET') return obterBase(env)
+  if (request.method === 'PUT') return publicarBase(request, env)
+  // Pré-verificação do navegador antes de um PUT vindo de outro domínio.
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204 })
+  return json({ erro: 'Método não permitido.' }, 405, { Allow: 'GET, PUT, OPTIONS' })
+}
+
+/** Cabeçalhos CORS para as origens de ORIGENS_PERMITIDAS; as demais seguem bloqueadas pelo navegador. */
+function liberarOrigem(request: Request, env: Env, resposta: Response) {
+  const origem = request.headers.get('Origin')
+  const permitidas = (env.ORIGENS_PERMITIDAS ?? '').split(',').map((item) => item.trim())
+  if (!origem || !permitidas.includes(origem)) return resposta
+
+  const cabecalhos = new Headers(resposta.headers)
+  cabecalhos.set('Access-Control-Allow-Origin', origem)
+  cabecalhos.set('Access-Control-Allow-Methods', 'GET, PUT')
+  cabecalhos.set('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+  cabecalhos.set('Access-Control-Max-Age', '86400')
+  cabecalhos.append('Vary', 'Origin')
+  return new Response(resposta.body, { status: resposta.status, headers: cabecalhos })
+}
 
 async function obterBase(env: Env) {
   const base = await env.DADOS.get(CHAVE_BASE)

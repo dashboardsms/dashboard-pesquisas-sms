@@ -1,4 +1,5 @@
 import { Landmark } from 'lucide-react'
+import { ROTA_IMPORTACAO } from '../lib/rotas.ts'
 
 const ANO_ATUAL = new Date().getFullYear()
 
@@ -35,7 +36,7 @@ export function Rodape() {
         </ul>
         <p className="text-xs text-neutral-500">
           © {ANO_ATUAL} Secretaria Municipal de Saúde · Dashboard de Pesquisas ·{' '}
-          <a href="/importar" className="underline decoration-neutral-300 underline-offset-2 hover:text-neutral-700">
+          <a href={ROTA_IMPORTACAO} className="underline decoration-neutral-300 underline-offset-2 hover:text-neutral-700">
             Importar planilha (acesso restrito)
           </a>
         </p>

@@ -1,6 +1,7 @@
 import type { BaseDePesquisas, Pesquisa } from '../types/pesquisa.ts'
 
-const URL_DADOS = '/api/dados'
+// Na Cloudflare a API está na mesma origem; no GitHub Pages, no endereço do Worker (VITE_API_URL).
+const URL_DADOS = `${(import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '')}/api/dados`
 
 /** Base publicada, ou `null` se nenhuma planilha foi importada ainda. */
 export async function carregarBase(): Promise<BaseDePesquisas | null> {

@@ -12,5 +12,7 @@
   },
   // Sem "id": o primeiro deploy cria o namespace e os seguintes reaproveitam o mesmo.
   "kv_namespaces": [{ "binding": "DADOS" }],
+  // O painel publicado no GitHub Pages chama a API deste Worker a partir de outro domínio.
+  "vars": { "ORIGENS_PERMITIDAS": "https://heldersantosufg.github.io" },
   "observability": { "enabled": true }
 }
