@@ -126,7 +126,7 @@ function Conteudo({ indicadores: i, filtros, anos, distritoPorUnidade, aoMudarEs
           />
         </div>
         {i.situacoesInferidas > 0 && (
-          <p className="mt-2 text-xs text-slate-600">
+          <p className="mt-2 text-xs text-neutral-600">
             {i.situacoesInferidas === i.cadastradas
               ? `A situação de todas as ${pluralizar(i.cadastradas, 'pesquisa', 'pesquisas')}`
               : `A situação de ${i.situacoesInferidas} das ${pluralizar(i.cadastradas, 'pesquisa', 'pesquisas')}`}{' '}
@@ -142,7 +142,7 @@ function Conteudo({ indicadores: i, filtros, anos, distritoPorUnidade, aoMudarEs
             <h2 id="titulo-distribuicao" className="text-lg font-semibold">
               {emExecucao ? 'Pesquisas em execução' : 'Todas as pesquisas cadastradas'}
             </h2>
-            <p className="mt-0.5 text-sm text-slate-600">
+            <p className="mt-0.5 text-sm text-neutral-600">
               Base: {pluralizar(i.consideradas, 'pesquisa', 'pesquisas')}
               {emExecucao ? ' em execução' : ''}, {periodo}. As proporções são calculadas sobre esse total.
             </p>
@@ -216,7 +216,7 @@ function Conteudo({ indicadores: i, filtros, anos, distritoPorUnidade, aoMudarEs
         <h2 id="titulo-panorama" className="text-lg font-semibold">
           Panorama das pesquisas cadastradas
         </h2>
-        <p className="mt-0.5 text-sm text-slate-600">
+        <p className="mt-0.5 text-sm text-neutral-600">
           Todas as {pluralizar(i.cadastradas, 'pesquisa', 'pesquisas')} {periodo}, em qualquer situação.
         </p>
 
@@ -251,14 +251,14 @@ function AlternarEscopo({ escopo, aoMudar }: { escopo: Escopo; aoMudar: (escopo:
     { valor: 'todas', rotulo: 'Todas' },
   ]
   return (
-    <div role="group" aria-label="Pesquisas consideradas nos painéis" className="flex rounded-md bg-white p-0.5 shadow-sm ring-1 ring-slate-900/10">
+    <div role="group" aria-label="Pesquisas consideradas nos painéis" className="flex rounded-md bg-white p-0.5 shadow-sm ring-1 ring-neutral-900/10">
       {opcoes.map((opcao) => (
         <button
           key={opcao.valor}
           type="button"
           aria-pressed={escopo === opcao.valor}
           onClick={() => aoMudar(opcao.valor)}
-          className="rounded px-3 py-1 text-sm font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-marca-450 aria-pressed:bg-marca-500 aria-pressed:text-white"
+          className="rounded px-3 py-1 text-sm font-medium text-neutral-600 hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-marca-450 aria-pressed:bg-marca-500 aria-pressed:text-white"
         >
           {opcao.rotulo}
         </button>

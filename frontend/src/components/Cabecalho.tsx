@@ -10,7 +10,7 @@ interface CabecalhoProps {
 
 export function Cabecalho({ atualizadoEm, children }: CabecalhoProps) {
   return (
-    <header className="z-30 bg-marca-600 text-white shadow-md md:sticky md:top-0">
+    <header className="z-30 border-b-4 border-destaque bg-marca-600 text-white shadow-md md:sticky md:top-0">
       <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-8 gap-y-3 px-4 py-3 sm:px-6">
         <a
           href="/"

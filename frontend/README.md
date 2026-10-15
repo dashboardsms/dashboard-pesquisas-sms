@@ -46,4 +46,4 @@ npm run lint
 
 ## Identidade visual
 
-As cores ficam em `src/index.css` (rampa `marca-*`). As marcas do rodapé são provisórias e devem ser substituídas pelas logomarcas oficiais do Município e da SMS (RNF06).
+As cores ficam em `src/index.css` (rampa `marca-*` em verde-água e amarelo `destaque`, tirados do site da SMS Goiânia — saude.goiania.go.gov.br — com a fonte Poppins). As marcas do rodapé são provisórias e devem ser substituídas pelas logomarcas oficiais do Município e da SMS (RNF06).

@@ -73,7 +73,7 @@ export function TabelaDistribuicao({
         <label className="relative mb-3 block">
           <span className="sr-only">{rotuloBusca}</span>
           <Search
-            className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-slate-400"
+            className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-neutral-400"
             aria-hidden
           />
           <input
@@ -84,7 +84,7 @@ export function TabelaDistribuicao({
               setBusca(evento.target.value)
               setPagina(1)
             }}
-            className="w-full rounded-md border border-slate-300 bg-white py-1.5 pr-3 pl-8 text-sm placeholder:text-slate-400 focus:border-marca-450 focus:ring-2 focus:ring-marca-200 focus:outline-none"
+            className="w-full rounded-md border border-neutral-300 bg-white py-1.5 pr-3 pl-8 text-sm placeholder:text-neutral-400 focus:border-marca-450 focus:ring-2 focus:ring-marca-200 focus:outline-none"
           />
         </label>
       )}
@@ -92,7 +92,7 @@ export function TabelaDistribuicao({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-300 text-xs text-slate-600">
+            <tr className="border-b border-neutral-300 text-xs text-neutral-600">
               <CabecalhoOrdenavel chave="categoria" {...propsCabecalho}>
                 {rotuloCategoria}
               </CabecalhoOrdenavel>
@@ -111,19 +111,19 @@ export function TabelaDistribuicao({
           </thead>
           <tbody>
             {visiveis.map((item) => (
-              <tr key={item.categoria} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                <td className="py-2 pr-3 text-slate-800">
+              <tr key={item.categoria} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50">
+                <td className="py-2 pr-3 text-neutral-800">
                   {item.categoria}
-                  {colunaExtra && <span className="block text-xs text-slate-500 sm:hidden">{extra(item)}</span>}
+                  {colunaExtra && <span className="block text-xs text-neutral-500 sm:hidden">{extra(item)}</span>}
                 </td>
-                {colunaExtra && <td className="hidden py-2 pr-3 text-slate-600 sm:table-cell">{extra(item)}</td>}
-                <td className="py-2 pl-3 text-right text-slate-800 tabular-nums">
+                {colunaExtra && <td className="hidden py-2 pr-3 text-neutral-600 sm:table-cell">{extra(item)}</td>}
+                <td className="py-2 pl-3 text-right text-neutral-800 tabular-nums">
                   {formatarNumero(item.quantidade)}
                 </td>
                 <td className="py-2 pl-3">
-                  <div className="flex items-center justify-end gap-2 text-slate-800 tabular-nums">
+                  <div className="flex items-center justify-end gap-2 text-neutral-800 tabular-nums">
                     {formatarPercentual(item.proporcao)}
-                    <span aria-hidden className="h-1.5 w-12 shrink-0 rounded-r bg-slate-100">
+                    <span aria-hidden className="h-1.5 w-12 shrink-0 rounded-r bg-neutral-100">
                       <span
                         className="block h-full rounded-r bg-serie"
                         style={{ width: `${(item.proporcao / maiorProporcao) * 100}%` }}
@@ -136,7 +136,7 @@ export function TabelaDistribuicao({
           </tbody>
         </table>
         {linhas.length === 0 && (
-          <p className="py-8 text-center text-sm text-slate-500">Nenhum resultado para “{busca.trim()}”.</p>
+          <p className="py-8 text-center text-sm text-neutral-500">Nenhum resultado para “{busca.trim()}”.</p>
         )}
       </div>
 
@@ -181,10 +181,10 @@ function CabecalhoOrdenavel({
       <button
         type="button"
         onClick={() => aoOrdenar(chave)}
-        className="inline-flex items-center gap-1 rounded-sm hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-450"
+        className="inline-flex items-center gap-1 rounded-sm hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-450"
       >
         {children}
-        <Icone className={`size-3.5 ${direcao ? 'text-marca-500' : 'text-slate-400'}`} aria-hidden />
+        <Icone className={`size-3.5 ${direcao ? 'text-marca-500' : 'text-neutral-400'}`} aria-hidden />
       </button>
     </th>
   )
@@ -199,12 +199,12 @@ interface PaginacaoProps {
 
 function Paginacao({ pagina, totalPaginas, resumo, aoMudar }: PaginacaoProps) {
   const estiloBotao =
-    'grid h-7 min-w-7 place-items-center rounded px-1.5 hover:bg-slate-100 disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-marca-450'
+    'grid h-7 min-w-7 place-items-center rounded px-1.5 hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-marca-450'
 
   return (
     <nav
       aria-label="Paginação da tabela"
-      className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3 text-xs text-slate-600"
+      className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3 text-xs text-neutral-600"
     >
       <p className="tabular-nums">Exibindo {resumo}</p>
       <div className="flex items-center gap-0.5">
@@ -219,7 +219,7 @@ function Paginacao({ pagina, totalPaginas, resumo, aoMudar }: PaginacaoProps) {
         </button>
         {paginasVisiveis(pagina, totalPaginas).map((numero, posicao) =>
           numero === null ? (
-            <span key={`intervalo-${posicao}`} className="px-1 text-slate-400">
+            <span key={`intervalo-${posicao}`} className="px-1 text-neutral-400">
               …
             </span>
           ) : (

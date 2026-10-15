@@ -8,7 +8,7 @@ export function EstadoCarga({ status }: EstadoCargaProps) {
   return (
     <div
       role={status === 'erro' ? 'alert' : 'status'}
-      className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center text-slate-600"
+      className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center text-neutral-600"
     >
       {status === 'carregando' && (
         <>
@@ -24,7 +24,7 @@ export function EstadoCarga({ status }: EstadoCargaProps) {
       )}
       {status === 'vazia' && (
         <>
-          <FileSpreadsheet className="size-8 text-slate-400" aria-hidden />
+          <FileSpreadsheet className="size-8 text-neutral-400" aria-hidden />
           <p>Nenhuma planilha foi importada ainda.</p>
           <a
             href="/importar"

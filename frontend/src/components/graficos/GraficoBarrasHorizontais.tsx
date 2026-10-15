@@ -25,7 +25,7 @@ export function GraficoBarrasHorizontais({ itens, titulo }: GraficoBarrasHorizon
           const ativa = indiceItem === indice
           const outros = item.outros === true
           const cor = outros
-            ? ativa ? 'bg-slate-500' : 'bg-slate-400'
+            ? ativa ? 'bg-neutral-500' : 'bg-neutral-400'
             : ativa ? 'bg-serie-ativa' : 'bg-serie'
 
           return (
@@ -35,13 +35,13 @@ export function GraficoBarrasHorizontais({ itens, titulo }: GraficoBarrasHorizon
                 {pluralizar(item.quantidade, 'pesquisa', 'pesquisas')}
               </span>
               <div aria-hidden className="flex items-baseline justify-between gap-3 text-[13px] leading-5">
-                <span className={ativa ? 'text-slate-900' : 'text-slate-700'}>{item.categoria}</span>
+                <span className={ativa ? 'text-neutral-900' : 'text-neutral-700'}>{item.categoria}</span>
                 <span className="shrink-0 tabular-nums">
-                  <span className="font-semibold text-slate-900">{formatarPercentual(item.proporcao)}</span>
-                  <span className="text-slate-500"> ({formatarNumero(item.quantidade)})</span>
+                  <span className="font-semibold text-neutral-900">{formatarPercentual(item.proporcao)}</span>
+                  <span className="text-neutral-500"> ({formatarNumero(item.quantidade)})</span>
                 </span>
               </div>
-              <div aria-hidden className="mt-1 h-2.5 rounded-r bg-slate-100">
+              <div aria-hidden className="mt-1 h-2.5 rounded-r bg-neutral-100">
                 <div
                   data-marca={indiceItem}
                   className={`h-full rounded-r transition-[width,background-color] duration-500 motion-reduce:transition-none ${cor}`}

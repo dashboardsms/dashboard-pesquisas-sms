@@ -78,7 +78,7 @@ export function PainelDistribuicao({
 export function NotaSemInformacao({ quantidade, total }: { quantidade: number; total: number }) {
   if (quantidade === 0 || total === 0) return null
   return (
-    <p className="mt-3 border-t border-slate-100 pt-2 text-xs text-slate-500">
+    <p className="mt-3 border-t border-neutral-100 pt-2 text-xs text-neutral-500">
       Sem informação na planilha: {pluralizar(quantidade, 'pesquisa', 'pesquisas')} (
       {formatarPercentual(quantidade / total)}).
     </p>

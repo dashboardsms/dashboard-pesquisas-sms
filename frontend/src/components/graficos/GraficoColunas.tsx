@@ -34,15 +34,15 @@ export function GraficoColunas({ itens, titulo }: GraficoColunasProps) {
                 {item.categoria}: {formatarPercentual(item.proporcao)},{' '}
                 {pluralizar(item.quantidade, 'pesquisa', 'pesquisas')}
               </span>
-              <div aria-hidden className="flex justify-center border-b border-slate-300 px-1 pt-6">
-                <div className={`relative w-full max-w-6 rounded-t ${ativa ? 'bg-slate-200' : 'bg-slate-100'}`}>
+              <div aria-hidden className="flex justify-center border-b border-neutral-300 px-1 pt-6">
+                <div className={`relative w-full max-w-6 rounded-t ${ativa ? 'bg-neutral-200' : 'bg-neutral-100'}`}>
                   <div
                     data-marca={indiceItem}
                     className={`absolute inset-x-0 bottom-0 rounded-t transition-[height,background-color] duration-500 motion-reduce:transition-none ${ativa ? 'bg-serie-ativa' : 'bg-serie'}`}
                     style={{ height: altura }}
                   />
                   <span
-                    className="absolute left-1/2 mb-1 -translate-x-1/2 text-xs font-semibold whitespace-nowrap text-slate-900 tabular-nums transition-[bottom] duration-500 motion-reduce:transition-none"
+                    className="absolute left-1/2 mb-1 -translate-x-1/2 text-xs font-semibold whitespace-nowrap text-neutral-900 tabular-nums transition-[bottom] duration-500 motion-reduce:transition-none"
                     style={{ bottom: altura }}
                   >
                     {formatarPercentual(item.proporcao)}
@@ -51,7 +51,7 @@ export function GraficoColunas({ itens, titulo }: GraficoColunasProps) {
               </div>
               <span
                 aria-hidden
-                className={`px-0.5 pt-2 text-center text-xs leading-tight [overflow-wrap:anywhere] ${ativa ? 'text-slate-900' : 'text-slate-600'}`}
+                className={`px-0.5 pt-2 text-center text-xs leading-tight [overflow-wrap:anywhere] ${ativa ? 'text-neutral-900' : 'text-neutral-600'}`}
               >
                 {hifenizar(item.categoria)}
               </span>

@@ -16,17 +16,17 @@ export function DialogoSobreDados({ ref, atualizadoEm }: DialogoSobreDadosProps)
       onClick={(evento) => {
         if (evento.target === evento.currentTarget) evento.currentTarget.close()
       }}
-      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-xl bg-white p-0 text-left text-slate-700 shadow-2xl backdrop:bg-slate-950/50"
+      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-xl bg-white p-0 text-left text-neutral-700 shadow-2xl backdrop:bg-neutral-950/50"
     >
       <div className="p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
-          <h2 id="sobre-dados-titulo" className="text-lg font-semibold text-slate-900">
+          <h2 id="sobre-dados-titulo" className="text-lg font-semibold text-neutral-900">
             Sobre os dados
           </h2>
           <form method="dialog">
             <button
               aria-label="Fechar"
-              className="grid size-8 place-items-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-marca-450"
+              className="grid size-8 place-items-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-marca-450"
             >
               <X className="size-5" aria-hidden />
             </button>
@@ -42,10 +42,10 @@ export function DialogoSobreDados({ ref, atualizadoEm }: DialogoSobreDadosProps)
             Quando a coluna “Situação” traz um valor padronizado (Em análise, Em execução, Finalizada ou
             Cancelada), ele é usado. Caso contrário, a situação é inferida das anotações da planilha:
             <ul className="mt-1 list-disc space-y-1 pl-5">
-              <li><strong className="font-semibold text-slate-900">Cancelada:</strong> as anotações citam cancelamento, arquivamento ou desistência.</li>
-              <li><strong className="font-semibold text-slate-900">Finalizada:</strong> as anotações registram a entrega do relatório final.</li>
-              <li><strong className="font-semibold text-slate-900">Em execução:</strong> há autorização ou período de coleta de dados registrado.</li>
-              <li><strong className="font-semibold text-slate-900">Em análise:</strong> demais casos (ainda em tramitação).</li>
+              <li><strong className="font-semibold text-neutral-900">Cancelada:</strong> as anotações citam cancelamento, arquivamento ou desistência.</li>
+              <li><strong className="font-semibold text-neutral-900">Finalizada:</strong> as anotações registram a entrega do relatório final.</li>
+              <li><strong className="font-semibold text-neutral-900">Em execução:</strong> há autorização ou período de coleta de dados registrado.</li>
+              <li><strong className="font-semibold text-neutral-900">Em análise:</strong> demais casos (ainda em tramitação).</li>
             </ul>
           </Item>
           <Item termo="Filtros de ano e mês">
@@ -68,7 +68,7 @@ export function DialogoSobreDados({ ref, atualizadoEm }: DialogoSobreDadosProps)
           </Item>
         </dl>
 
-        <p className="mt-6 rounded-lg bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
+        <p className="mt-6 rounded-lg bg-neutral-50 p-3 text-xs leading-relaxed text-neutral-600">
           Critérios em validação com a área responsável: classificação das situações, campo usado nos filtros e
           contagem de pesquisas com mais de uma unidade ou distrito.
         </p>
@@ -80,7 +80,7 @@ export function DialogoSobreDados({ ref, atualizadoEm }: DialogoSobreDadosProps)
 function Item({ termo, children }: { termo: string; children: ReactNode }) {
   return (
     <div>
-      <dt className="font-semibold text-slate-900">{termo}</dt>
+      <dt className="font-semibold text-neutral-900">{termo}</dt>
       <dd className="mt-0.5">{children}</dd>
     </div>
   )

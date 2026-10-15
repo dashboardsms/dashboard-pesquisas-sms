@@ -43,8 +43,8 @@ const SITUACAO_NO_TEXTO: Record<Situacao, [string, string]> = {
 const ROTULOS_USO: Record<UsoColuna, { rotulo: string; classe: string }> = {
   painel: { rotulo: 'Painel', classe: 'bg-marca-100 text-marca-700' },
   situacao: { rotulo: 'Situação', classe: 'bg-sky-100 text-sky-900' },
-  apoio: { rotulo: 'Apoio', classe: 'bg-slate-200 text-slate-700' },
-  descartada: { rotulo: 'Descartada', classe: 'bg-slate-100 text-slate-500 line-through' },
+  apoio: { rotulo: 'Apoio', classe: 'bg-neutral-200 text-neutral-700' },
+  descartada: { rotulo: 'Descartada', classe: 'bg-neutral-100 text-neutral-500 line-through' },
 }
 
 export function PaginaImportacao() {
@@ -93,8 +93,8 @@ export function PaginaImportacao() {
       </Cabecalho>
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Importar planilha</h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <h1 className="text-2xl font-semibold text-neutral-900">Importar planilha</h1>
+        <p className="mt-2 text-sm text-neutral-600">
           {atual
             ? `Base publicada hoje no painel: ${pluralizar(atual.pesquisas.length, 'pesquisa', 'pesquisas')}, importada em ${formatarData(atual.atualizadoEm)}. A nova importação substitui todos esses dados.`
             : 'Ainda não há dados publicados no painel.'}
@@ -124,11 +124,11 @@ export function PaginaImportacao() {
             />
           </label>
           {leitura.status !== 'inicial' && (
-            <p className="mt-3 flex items-center gap-2 text-sm text-slate-700">
+            <p className="mt-3 flex items-center gap-2 text-sm text-neutral-700">
               {leitura.status === 'lendo' ? (
                 <LoaderCircle className="size-4 animate-spin text-marca-500 motion-reduce:animate-none" aria-hidden />
               ) : (
-                <FileSpreadsheet className="size-4 text-slate-500" aria-hidden />
+                <FileSpreadsheet className="size-4 text-neutral-500" aria-hidden />
               )}
               {leitura.arquivo}
               {leitura.status === 'lendo' && ' — lendo…'}
@@ -147,15 +147,15 @@ export function PaginaImportacao() {
             <ul className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
               {COLUNAS.map((coluna) => (
                 <li key={coluna.letra} className="flex items-center gap-2">
-                  <span className="w-5 shrink-0 font-mono text-xs font-semibold text-slate-500">{coluna.letra}</span>
-                  <span className="min-w-0 flex-1 text-slate-700">{coluna.cabecalho}</span>
+                  <span className="w-5 shrink-0 font-mono text-xs font-semibold text-neutral-500">{coluna.letra}</span>
+                  <span className="min-w-0 flex-1 text-neutral-700">{coluna.cabecalho}</span>
                   <span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium ${ROTULOS_USO[coluna.uso].classe}`}>
                     {ROTULOS_USO[coluna.uso].rotulo}
                   </span>
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-neutral-500">
               Painel: alimenta os gráficos. Situação: lida só para classificar a situação. Apoio: usada na leitura, não
               publicada. Descartada: nunca sai do navegador.
             </p>
@@ -174,11 +174,11 @@ export function PaginaImportacao() {
               <Alerta tipo="erro">Corrija os erros acima na planilha e selecione o arquivo novamente.</Alerta>
             ) : (
               <form onSubmit={publicar} className="flex flex-wrap items-end gap-3">
-                <label className="flex min-w-60 flex-1 flex-col gap-1 text-sm font-medium text-slate-700">
+                <label className="flex min-w-60 flex-1 flex-col gap-1 text-sm font-medium text-neutral-700">
                   Senha de importação
                   <span className="relative">
                     <LockKeyhole
-                      className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-slate-400"
+                      className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-neutral-400"
                       aria-hidden
                     />
                     <input
@@ -186,7 +186,7 @@ export function PaginaImportacao() {
                       autoComplete="current-password"
                       value={senha}
                       onChange={(evento) => setSenha(evento.target.value)}
-                      className="w-full rounded-md border border-slate-300 bg-white py-2 pr-3 pl-8 text-sm font-normal focus:border-marca-450 focus:ring-2 focus:ring-marca-200 focus:outline-none"
+                      className="w-full rounded-md border border-neutral-300 bg-white py-2 pr-3 pl-8 text-sm font-normal focus:border-marca-450 focus:ring-2 focus:ring-marca-200 focus:outline-none"
                     />
                   </span>
                 </label>
@@ -255,7 +255,7 @@ function Relatorio({ resultado }: { resultado: ResultadoImportacao }) {
         ))}
       </dl>
 
-      <div className="text-sm text-slate-700">
+      <div className="text-sm text-neutral-700">
         <p>
           {leitura.abasLidas.map((aba) => `Aba “${aba.nome}”: ${pluralizar(aba.registros, 'linha', 'linhas')}`).join(' · ')}
           {duplicadas > 0 && ` · ${pluralizar(duplicadas, 'linha repetida removida', 'linhas repetidas removidas')}`}
@@ -264,7 +264,7 @@ function Relatorio({ resultado }: { resultado: ResultadoImportacao }) {
         </p>
         {motivos.length > 0 && (
           <div className="mt-3">
-            <p className="font-medium text-slate-900">Como as situações foram inferidas</p>
+            <p className="font-medium text-neutral-900">Como as situações foram inferidas</p>
             <ul className="mt-1 space-y-0.5">
               {motivos.map((motivo) => (
                 <li key={`${motivo.situacao}-${motivo.motivo}`}>
@@ -281,7 +281,7 @@ function Relatorio({ resultado }: { resultado: ResultadoImportacao }) {
 
       {avisos.length > 0 && (
         <div>
-          <p className="text-sm font-medium text-slate-900">
+          <p className="text-sm font-medium text-neutral-900">
             Avisos ({avisos.length}) — não impedem a publicação, mas indicam pontos a revisar na planilha
           </p>
           <ul className="mt-2 space-y-2">
@@ -327,7 +327,7 @@ function ItemAviso({ grupo }: { grupo: GrupoAvisos }) {
 
 function Etapa({ numero, titulo, children }: { numero: number; titulo: string; children: ReactNode }) {
   return (
-    <section className="mt-6 rounded-lg bg-white shadow-sm ring-1 ring-slate-900/5" aria-labelledby={`etapa-${numero}`}>
+    <section className="mt-6 rounded-lg bg-white shadow-sm ring-1 ring-neutral-900/5" aria-labelledby={`etapa-${numero}`}>
       <h2 id={`etapa-${numero}`} className="flex items-center gap-2 rounded-t-lg bg-marca-500 px-4 py-2.5 text-sm font-medium text-white">
         <span className="grid size-5 place-items-center rounded-full bg-white text-xs font-semibold text-marca-600">
           {numero}
@@ -341,9 +341,9 @@ function Etapa({ numero, titulo, children }: { numero: number; titulo: string; c
 
 function Numero({ rotulo, valor, destaque = false }: { rotulo: string; valor: number; destaque?: boolean }) {
   return (
-    <div className={`rounded-md p-3 ${destaque ? 'bg-marca-100' : 'bg-slate-50'}`}>
-      <dt className="text-xs text-slate-600">{rotulo}</dt>
-      <dd className="mt-0.5 text-2xl font-semibold text-slate-900">{formatarNumero(valor)}</dd>
+    <div className={`rounded-md p-3 ${destaque ? 'bg-marca-100' : 'bg-neutral-50'}`}>
+      <dt className="text-xs text-neutral-600">{rotulo}</dt>
+      <dd className="mt-0.5 text-2xl font-semibold text-neutral-900">{formatarNumero(valor)}</dd>
     </div>
   )
 }

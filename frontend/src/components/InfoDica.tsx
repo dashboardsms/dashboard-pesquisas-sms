@@ -58,7 +58,7 @@ export function InfoDica({ texto, rotulo }: InfoDicaProps) {
       <span
         id={id}
         hidden={!aberta}
-        className="absolute inset-x-3 top-full z-20 mt-1.5 max-w-md rounded-md bg-white p-3 text-xs leading-relaxed font-normal text-slate-700 shadow-lg ring-1 ring-slate-900/10"
+        className="absolute inset-x-3 top-full z-20 mt-1.5 max-w-md rounded-md bg-white p-3 text-xs leading-relaxed font-normal text-neutral-700 shadow-lg ring-1 ring-neutral-900/10"
       >
         {texto}
       </span>

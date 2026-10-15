@@ -23,7 +23,7 @@ export function SeletorFiltro({ rotulo, valor, opcoes, aoMudar, desabilitado = f
           value={valor}
           disabled={desabilitado}
           onChange={(evento) => aoMudar(evento.target.value === 'todos' ? 'todos' : Number(evento.target.value))}
-          className="appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-sm font-medium text-slate-900 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60"
+          className="appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-sm font-medium text-neutral-900 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60"
         >
           <option value="todos">Todos</option>
           {opcoes.map((opcao) => (
@@ -33,7 +33,7 @@ export function SeletorFiltro({ rotulo, valor, opcoes, aoMudar, desabilitado = f
           ))}
         </select>
         <ChevronDown
-          className="pointer-events-none absolute top-1/2 right-2 size-4 -translate-y-1/2 text-slate-500"
+          className="pointer-events-none absolute top-1/2 right-2 size-4 -translate-y-1/2 text-neutral-500"
           aria-hidden
         />
       </span>

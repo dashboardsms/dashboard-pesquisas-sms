@@ -16,7 +16,7 @@ export function Painel({ titulo, descricao, acoes, className = '', children }: P
   return (
     <section
       aria-labelledby={idTitulo}
-      className={`flex min-w-0 flex-col rounded-lg bg-white shadow-sm ring-1 ring-slate-900/5 ${className}`}
+      className={`flex min-w-0 flex-col rounded-lg bg-white shadow-sm ring-1 ring-neutral-900/5 ${className}`}
     >
       <header className="relative flex min-h-11 items-center gap-1.5 rounded-t-lg bg-marca-500 py-1.5 pr-2 pl-4 text-white">
         <h3 id={idTitulo} className="text-sm font-medium">
