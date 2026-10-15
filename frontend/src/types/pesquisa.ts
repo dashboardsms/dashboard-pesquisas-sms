@@ -1,51 +1,59 @@
+export const SITUACOES = ['em_analise', 'em_execucao', 'finalizada', 'cancelada'] as const
+
+export type Situacao = (typeof SITUACOES)[number]
+
+export const ROTULOS_SITUACAO: Record<Situacao, string> = {
+  em_analise: 'Em análise',
+  em_execucao: 'Em execução',
+  finalizada: 'Finalizada',
+  cancelada: 'Cancelada',
+}
+
 /** Ordem de exibição: níveis acadêmicos primeiro, depois os demais vínculos. */
 export const NATUREZAS = [
   'Graduação',
-  'Residência',
   'Especialização',
+  'Residência',
+  'Pós-graduação',
   'Mestrado',
   'Doutorado',
-  'Institucional',
   'Extensão',
+  'Institucional',
+  'Outra',
 ] as const
 
 export type Natureza = (typeof NATUREZAS)[number]
 
-/**
- * Situação da pesquisa no fluxo da SMS. A regra que classifica cada registro da
- * planilha ainda está em validação (docs/pendencias-validacao.md, item 1).
- */
-export type Situacao = 'em_analise' | 'em_execucao' | 'finalizada' | 'cancelada'
-
-export interface Instituicao {
-  sigla: string
-  nome: string
-}
-
 export interface UnidadeSaude {
   nome: string
-  distrito: string
+  distrito: string | null
 }
 
-/** Registro de pesquisa já normalizado. Não contém dados pessoais (RN06). */
+/**
+ * Pesquisa como publicada no painel: só campos agregáveis, sem nomes, e-mails,
+ * títulos ou anotações da planilha (RN06).
+ */
 export interface Pesquisa {
-  protocolo: string
-  /** Data no formato AAAA-MM-DD. */
-  dataProtocolo: string
+  /** Ano da data de protocolo (ou do número do protocolo, quando falta a data). */
+  ano: number | null
+  /** Mês (1–12) da data de protocolo; nulo quando a data não foi informada. */
+  mes: number | null
   situacao: Situacao
-  instituicao: Instituicao
-  programa: string
-  natureza: Natureza
-  linhaPesquisa: string
-  /** Diretoria da SMS relacionada à pesquisa. */
-  areaSms: string
+  /** Verdadeiro quando a coluna "Situação" trouxe um valor padronizado; falso quando foi inferida. */
+  situacaoInformada: boolean
+  instituicao: string | null
+  programa: string | null
+  natureza: Natureza | null
+  distritos: string[]
   unidades: UnidadeSaude[]
 }
 
 export interface BaseDePesquisas {
-  /** Data da última publicação, no formato AAAA-MM-DD. */
+  /** Data da última importação, no formato AAAA-MM-DD. */
   atualizadoEm: string
-  /** Base de demonstração, com números fictícios. */
-  ficticia: boolean
   pesquisas: Pesquisa[]
 }
+
+/** Categorias que reúnem valores agrupados na importação ou somados nos gráficos. */
+export const OUTRAS_INSTITUICOES = 'Outras instituições'
+export const OUTROS_PROGRAMAS = 'Outros programas'

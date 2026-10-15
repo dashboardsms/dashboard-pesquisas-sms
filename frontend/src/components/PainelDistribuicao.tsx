@@ -1,6 +1,7 @@
 import { ChartBar, ChartColumn, Table2, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
-import { agruparExcedentes, type ItemDistribuicao } from '../lib/indicadores.ts'
+import { formatarPercentual, pluralizar } from '../lib/formatacao.ts'
+import { agruparExcedentes, type Distribuicao } from '../lib/indicadores.ts'
 import { EstadoVazio } from './EstadoVazio.tsx'
 import { GraficoBarrasHorizontais } from './graficos/GraficoBarrasHorizontais.tsx'
 import { GraficoColunas } from './graficos/GraficoColunas.tsx'
@@ -9,13 +10,17 @@ import { TabelaDistribuicao } from './TabelaDistribuicao.tsx'
 
 type Visao = 'grafico' | 'tabela'
 
+export const CAMPO_VAZIO = 'Campo não preenchido na planilha para as pesquisas selecionadas.'
+
 interface PainelDistribuicaoProps {
   titulo: string
   descricao: string
-  itens: ItemDistribuicao[]
+  distribuicao: Distribuicao
   grafico: 'barras' | 'colunas'
   /** Cabeçalho da coluna de categorias na visão em tabela. */
   rotuloCategoria: string
+  /** Mensagem quando não há nenhuma pesquisa no período. */
+  mensagemSemPesquisas: string
   /** No gráfico, soma as categorias além das `limite` primeiras; a tabela mostra todas. */
   agrupar?: { limite: number; rotulo: string }
   className?: string
@@ -25,13 +30,15 @@ interface PainelDistribuicaoProps {
 export function PainelDistribuicao({
   titulo,
   descricao,
-  itens,
+  distribuicao,
   grafico,
   rotuloCategoria,
+  mensagemSemPesquisas,
   agrupar,
   className,
 }: PainelDistribuicaoProps) {
   const [visao, setVisao] = useState<Visao>('grafico')
+  const { itens, semInformacao, total } = distribuicao
   const vazio = itens.every((item) => item.quantidade === 0)
   const Grafico = grafico === 'barras' ? GraficoBarrasHorizontais : GraficoColunas
   const itensGrafico = agrupar ? agruparExcedentes(itens, agrupar.limite, agrupar.rotulo) : itens
@@ -52,13 +59,29 @@ export function PainelDistribuicao({
       }
     >
       {vazio ? (
-        <EstadoVazio />
-      ) : visao === 'grafico' ? (
-        <Grafico itens={itensGrafico} titulo={titulo} />
+        <EstadoVazio mensagem={total === 0 ? mensagemSemPesquisas : CAMPO_VAZIO} />
       ) : (
-        <TabelaDistribuicao itens={itens} rotuloCategoria={rotuloCategoria} />
+        <>
+          {visao === 'grafico' ? (
+            <Grafico itens={itensGrafico} titulo={titulo} />
+          ) : (
+            <TabelaDistribuicao itens={itens} rotuloCategoria={rotuloCategoria} />
+          )}
+          <NotaSemInformacao quantidade={semInformacao} total={total} />
+        </>
       )}
     </Painel>
+  )
+}
+
+/** Quantas pesquisas não têm este campo preenchido; elas ficam fora das barras, mas dentro da base. */
+export function NotaSemInformacao({ quantidade, total }: { quantidade: number; total: number }) {
+  if (quantidade === 0 || total === 0) return null
+  return (
+    <p className="mt-3 border-t border-slate-100 pt-2 text-xs text-slate-500">
+      Sem informação na planilha: {pluralizar(quantidade, 'pesquisa', 'pesquisas')} (
+      {formatarPercentual(quantidade / total)}).
+    </p>
   )
 }
 

@@ -1,55 +1,49 @@
-# Frontend — Dashboard de Pesquisas da SMS
+# Aplicação — Dashboard de Pesquisas da SMS
 
-Interface do painel público de pesquisas, em React + TypeScript + Tailwind CSS (Vite).
+Painel público e importação da planilha, em React + TypeScript + Tailwind CSS, com uma API em Cloudflare Workers no mesmo projeto.
 
-> **Protótipo:** os números vêm de uma base fictícia gerada localmente. Nenhum dado da planilha real é usado.
+- **Publicar:** siga [docs/deploy.md](../docs/deploy.md). Tudo é feito pelo navegador.
+- **Páginas:** `/` (painel público) e `/importar` (importação da planilha, protegida por senha).
+- **API:** `GET /api/dados` devolve a base publicada; `PUT /api/dados` grava uma nova base (exige a senha).
 
-## Como rodar
+## Como os dados fluem
 
-```bash
-npm install
-npm run dev       # servidor de desenvolvimento (http://localhost:5173)
-npm run build     # build de produção em dist/ (caminhos relativos, publicável em qualquer subpasta)
-npm run lint
-```
-
-## O que a tela mostra
-
-- **Cabeçalho:** filtro por ano (RF04), "Sobre os dados" e data da última atualização (RF12).
-- **Indicadores gerais:** totais de pesquisas cadastradas, em execução e finalizadas (RF01–RF03).
-- **Pesquisas em execução** (RN02), com proporções sobre esse total (RN04):
-  - IES (barras horizontais), Unidade de saúde (tabela com busca), Natureza (colunas),
-    Linha de pesquisa (barras), Distrito sanitário (colunas), Programa (barras) e Área da SMS (colunas).
-  - Todo gráfico tem uma visão equivalente em tabela, útil também para decidir pendências como
-    "Programa: gráfico ou tabela?".
+1. Em `/importar`, o navegador lê o `.xlsx` (`src/planilha/lerPlanilha.ts`). Cada aba precisa ter exatamente as colunas A a V do modelo (`src/planilha/estrutura.ts`).
+2. `src/planilha/converterPlanilha.ts` transforma cada linha em uma pesquisa publicável:
+   - padroniza IES, natureza e programa;
+   - classifica a situação;
+   - lê ano e mês do protocolo;
+   - descarta nomes, e-mails, títulos e anotações.
+   As regras ficam em `src/planilha/normalizacao.ts`.
+3. O relatório mostra erros e avisos por linha. Com a senha, as pesquisas são enviadas à API (`worker/index.ts`). A API filtra os campos de novo (`src/lib/sanitizarPesquisas.ts`) e grava no KV.
+4. O painel (`src/components/PaginaPainel.tsx`) busca a base e calcula os indicadores (`src/lib/indicadores.ts`) conforme os filtros de ano, mês e escopo.
 
 ## Estrutura
 
 ```text
-src/
-├── App.tsx                  # composição da página e filtro de ano
-├── types/pesquisa.ts        # formato dos dados (sem dados pessoais — RN06)
-├── data/
-│   ├── carregarBase.ts      # ponto único de carga dos dados
-│   └── baseFicticia.ts      # base de demonstração (semente fixa)
-├── lib/
-│   ├── indicadores.ts       # totais, filtro por ano e distribuições
-│   └── formatacao.ts        # números, percentuais e datas em pt-BR
-├── hooks/                   # carga da base e destaque/dica dos gráficos
-└── components/              # cabeçalho, cartões, painéis, gráficos e tabela
+frontend/
+├── wrangler.jsonc            # configuração do Worker (nome, assets, KV)
+├── worker/index.ts           # API: GET/PUT /api/dados
+└── src/
+    ├── App.tsx               # escolhe a página pelo caminho
+    ├── types/pesquisa.ts     # formato publicado (sem dados pessoais — RN06)
+    ├── planilha/             # leitura, normalização e conversão da planilha
+    ├── data/api.ts           # chamadas à API
+    ├── lib/                  # indicadores, formatação pt-BR, sanitização
+    ├── hooks/                # carga da base e destaque/dica dos gráficos
+    └── components/           # páginas, cabeçalho, cartões, painéis, gráficos e tabela
 ```
 
-## Ligando aos dados reais
+## Desenvolvimento local (opcional)
 
-Basta trocar o corpo de `carregarBaseDePesquisas()` em `src/data/carregarBase.ts` por uma leitura do
-arquivo gerado a partir da planilha (por exemplo, `fetch('dados/pesquisas.json')`), no formato
-`BaseDePesquisas` de `src/types/pesquisa.ts`. Com `ficticia: false`, o aviso de protótipo some.
-
-As regras ainda em validação (`docs/pendencias-validacao.md`) estão concentradas em
-`src/lib/indicadores.ts`: campo do filtro por ano, contagem de pesquisas com mais de uma unidade ou
-distrito e ordem das categorias.
+```bash
+npm install
+echo "SENHA_IMPORTACAO=uma-senha-local" > .dev.vars   # senha usada em /importar
+npm run dev      # painel + API + KV simulado em http://localhost:5173
+npm run build    # gera dist/ (o mesmo build que roda na Cloudflare)
+npm run lint
+```
 
 ## Identidade visual
 
-As cores ficam em `src/index.css` (rampa `marca-*`). As marcas do rodapé são provisórias e devem ser
-substituídas pelas logomarcas oficiais do Município e da SMS (RNF06).
+As cores ficam em `src/index.css` (rampa `marca-*`). As marcas do rodapé são provisórias e devem ser substituídas pelas logomarcas oficiais do Município e da SMS (RNF06).

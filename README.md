@@ -64,15 +64,12 @@ Entrega prevista: **15/11/2026**.
 - [Regras de negócio](docs/regras-de-negocio.md)
 - [Pendências para validação](docs/pendencias-validacao.md)
 - [Protótipo e identidade visual](prototipo/README.md)
-- [Frontend (React + TypeScript + Tailwind)](frontend/README.md)
+- [Aplicação (React + TypeScript + Tailwind + Cloudflare Workers)](frontend/README.md)
+- [Publicação e importação da planilha](docs/deploy.md)
 
-## Executar o frontend
+## Publicação
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+A aplicação roda no plano gratuito da Cloudflare Workers: painel público em `/` e importação da planilha (com senha) em `/importar`. O passo a passo, feito só pelo navegador, está em [docs/deploy.md](docs/deploy.md).
 
 ## Estrutura do repositório
 
@@ -84,13 +81,14 @@ dashboard-pesquisas-sms/
 │   ├── bpm.md
 │   ├── casos-de-uso.md
 │   ├── regras-de-negocio.md
-│   └── pendencias-validacao.md
+│   ├── pendencias-validacao.md
+│   └── deploy.md
 ├── diagramas/
 │   ├── bpmn/
 │   └── caso-de-uso/
 ├── dados/
 │   └── README.md
-├── frontend/          # interface do dashboard (Vite + React + TypeScript + Tailwind)
+├── frontend/          # aplicação: painel, importação da planilha e API (Cloudflare Workers)
 └── prototipo/
     └── README.md
 ```

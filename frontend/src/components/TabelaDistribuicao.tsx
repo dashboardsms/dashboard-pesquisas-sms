@@ -25,6 +25,8 @@ interface TabelaDistribuicaoProps {
   /** Texto do campo de busca; sem ele, a tabela não tem busca. */
   rotuloBusca?: string
   itensPorPagina?: number
+  /** Mensagem quando não há itens. */
+  mensagemVazia?: string
 }
 
 /**
@@ -37,12 +39,13 @@ export function TabelaDistribuicao({
   colunaExtra,
   rotuloBusca,
   itensPorPagina = 8,
+  mensagemVazia,
 }: TabelaDistribuicaoProps) {
   const [busca, setBusca] = useState('')
   const [ordenacao, setOrdenacao] = useState<Ordenacao>(null)
   const [pagina, setPagina] = useState(1)
 
-  if (itens.length === 0) return <EstadoVazio />
+  if (itens.length === 0) return <EstadoVazio mensagem={mensagemVazia} />
 
   const extra = (item: ItemDistribuicao) => colunaExtra?.valor(item.categoria) ?? ''
   const termo = normalizarBusca(busca.trim())

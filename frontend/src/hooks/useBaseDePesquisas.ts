@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { carregarBaseDePesquisas } from '../data/carregarBase.ts'
+import { carregarBase } from '../data/api.ts'
 import type { BaseDePesquisas } from '../types/pesquisa.ts'
 
 export type CargaDaBase =
   | { status: 'carregando' }
   | { status: 'erro' }
+  | { status: 'vazia' }
   | { status: 'pronta'; base: BaseDePesquisas }
 
 export function useBaseDePesquisas(): CargaDaBase {
@@ -12,9 +13,9 @@ export function useBaseDePesquisas(): CargaDaBase {
 
   useEffect(() => {
     let ativo = true
-    carregarBaseDePesquisas()
+    carregarBase()
       .then((base) => {
-        if (ativo) setCarga({ status: 'pronta', base })
+        if (ativo) setCarga(base ? { status: 'pronta', base } : { status: 'vazia' })
       })
       .catch(() => {
         if (ativo) setCarga({ status: 'erro' })

@@ -34,7 +34,10 @@ export function Rodape() {
           </li>
         </ul>
         <p className="text-xs text-slate-500">
-          © {ANO_ATUAL} Secretaria Municipal de Saúde · Dashboard de Pesquisas
+          © {ANO_ATUAL} Secretaria Municipal de Saúde · Dashboard de Pesquisas ·{' '}
+          <a href="/importar" className="underline decoration-slate-300 underline-offset-2 hover:text-slate-700">
+            Importar planilha (acesso restrito)
+          </a>
         </p>
       </div>
     </footer>

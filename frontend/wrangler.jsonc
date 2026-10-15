@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Deve ser igual ao nome do Worker no painel da Cloudflare.
+  "name": "dashboard-pesquisas-sms",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    // O painel é uma SPA: rotas como /importar devolvem o index.html.
+    "not_found_handling": "single-page-application",
+    // Só a API passa pelo Worker; os demais arquivos saem direto dos assets.
+    "run_worker_first": ["/api/*"]
+  },
+  // Sem "id": o primeiro deploy cria o namespace e os seguintes reaproveitam o mesmo.
+  "kv_namespaces": [{ "binding": "DADOS" }],
+  "observability": { "enabled": true }
+}

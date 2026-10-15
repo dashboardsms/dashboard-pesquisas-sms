@@ -23,7 +23,7 @@ export function GraficoBarrasHorizontais({ itens, titulo }: GraficoBarrasHorizon
       <ul className="space-y-2.5">
         {itens.map((item, indiceItem) => {
           const ativa = indiceItem === indice
-          const outros = item.agrupadas !== undefined
+          const outros = item.outros === true
           const cor = outros
             ? ativa ? 'bg-slate-500' : 'bg-slate-400'
             : ativa ? 'bg-serie-ativa' : 'bg-serie'

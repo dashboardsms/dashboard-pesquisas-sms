@@ -1,27 +1,34 @@
 import { ChevronDown } from 'lucide-react'
-import type { FiltroAno } from '../lib/indicadores.ts'
+import { useId } from 'react'
 
-interface SeletorAnoProps {
-  anos: number[]
-  valor: FiltroAno
-  aoMudar: (ano: FiltroAno) => void
+interface SeletorFiltroProps {
+  rotulo: string
+  valor: number | 'todos'
+  opcoes: { valor: number; rotulo: string }[]
+  aoMudar: (valor: number | 'todos') => void
+  desabilitado?: boolean
 }
 
-export function SeletorAno({ anos, valor, aoMudar }: SeletorAnoProps) {
+export function SeletorFiltro({ rotulo, valor, opcoes, aoMudar, desabilitado = false }: SeletorFiltroProps) {
+  const id = useId()
+
   return (
-    <label className="flex items-center gap-2 text-sm font-medium">
-      Ano
+    <div className="flex items-center gap-2">
+      <label htmlFor={id} className="text-sm font-medium">
+        {rotulo}
+      </label>
       <span className="relative">
         <select
+          id={id}
           value={valor}
-          disabled={anos.length === 0}
+          disabled={desabilitado}
           onChange={(evento) => aoMudar(evento.target.value === 'todos' ? 'todos' : Number(evento.target.value))}
           className="appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-sm font-medium text-slate-900 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60"
         >
           <option value="todos">Todos</option>
-          {anos.map((ano) => (
-            <option key={ano} value={ano}>
-              {ano}
+          {opcoes.map((opcao) => (
+            <option key={opcao.valor} value={opcao.valor}>
+              {opcao.rotulo}
             </option>
           ))}
         </select>
@@ -30,6 +37,6 @@ export function SeletorAno({ anos, valor, aoMudar }: SeletorAnoProps) {
           aria-hidden
         />
       </span>
-    </label>
+    </div>
   )
 }

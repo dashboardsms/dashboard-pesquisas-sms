@@ -21,10 +21,8 @@ export function DicaGrafico({ ref, item }: DicaGraficoProps) {
           <span className="font-normal text-slate-500"> · {formatarPercentual(item.proporcao)}</span>
         </p>
         <p className="mt-0.5 text-xs text-slate-600">{item.categoria}</p>
-        {item.agrupadas !== undefined && (
-          <p className="mt-0.5 text-xs text-slate-500">
-            Soma de {item.agrupadas} categorias menos frequentes
-          </p>
+        {item.outros && (
+          <p className="mt-0.5 text-xs text-slate-500">Soma das categorias menos frequentes ou não padronizadas</p>
         )}
       </div>
     </div>

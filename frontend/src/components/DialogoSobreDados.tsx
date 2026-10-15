@@ -5,11 +5,10 @@ import { formatarData } from '../lib/formatacao.ts'
 interface DialogoSobreDadosProps {
   ref: Ref<HTMLDialogElement>
   atualizadoEm?: string
-  ficticia?: boolean
 }
 
 /** Diálogo nativo (`showModal`): Esc e o botão fecham; clique fora também. */
-export function DialogoSobreDados({ ref, atualizadoEm, ficticia }: DialogoSobreDadosProps) {
+export function DialogoSobreDados({ ref, atualizadoEm }: DialogoSobreDadosProps) {
   return (
     <dialog
       ref={ref}
@@ -35,38 +34,44 @@ export function DialogoSobreDados({ ref, atualizadoEm, ficticia }: DialogoSobreD
         </div>
 
         <dl className="mt-4 space-y-4 text-sm leading-relaxed">
-          <Item termo="Fonte">Planilha de registro de pesquisas mantida pela Escola, alimentada diariamente.</Item>
-          <Item termo="Atualização do painel">
-            Mensal.{atualizadoEm && ` Última atualização em ${formatarData(atualizadoEm)}.`}
+          <Item termo="Fonte">
+            Planilha de registro de pesquisas mantida pela Escola, importada periodicamente pelo responsável pelo
+            painel.{atualizadoEm && ` Última importação em ${formatarData(atualizadoEm)}.`}
           </Item>
-          <Item termo="Situações">
-            <ul className="list-disc space-y-1 pl-5">
-              <li><strong className="font-semibold text-slate-900">Cadastradas:</strong> todas as pesquisas protocoladas no período.</li>
-              <li><strong className="font-semibold text-slate-900">Em análise:</strong> em tramitação (pareceres, anuência, CEP), ainda sem autorização de coleta.</li>
-              <li><strong className="font-semibold text-slate-900">Em execução:</strong> autorizadas, com coleta ou desenvolvimento em andamento.</li>
-              <li><strong className="font-semibold text-slate-900">Finalizadas:</strong> concluídas, com relatório final entregue.</li>
+          <Item termo="Situação das pesquisas">
+            Quando a coluna “Situação” traz um valor padronizado (Em análise, Em execução, Finalizada ou
+            Cancelada), ele é usado. Caso contrário, a situação é inferida das anotações da planilha:
+            <ul className="mt-1 list-disc space-y-1 pl-5">
+              <li><strong className="font-semibold text-slate-900">Cancelada:</strong> as anotações citam cancelamento, arquivamento ou desistência.</li>
+              <li><strong className="font-semibold text-slate-900">Finalizada:</strong> as anotações registram a entrega do relatório final.</li>
+              <li><strong className="font-semibold text-slate-900">Em execução:</strong> há autorização ou período de coleta de dados registrado.</li>
+              <li><strong className="font-semibold text-slate-900">Em análise:</strong> demais casos (ainda em tramitação).</li>
             </ul>
           </Item>
-          <Item termo="Filtro por ano">Considera o ano da data de protocolo da pesquisa.</Item>
+          <Item termo="Filtros de ano e mês">
+            Consideram a data de protocolo. Sem a data, o ano vem do número do protocolo (por exemplo, 21/2022) e a
+            pesquisa não entra no filtro de mês.
+          </Item>
           <Item termo="Proporções">
-            Os gráficos consideram as pesquisas em execução no período. Pesquisas realizadas em mais de uma
-            unidade de saúde ou distrito são contadas em cada um deles; por isso, nesses painéis a soma pode
+            Calculadas sobre as pesquisas consideradas no período (em execução ou todas). Pesquisas realizadas em
+            mais de uma unidade de saúde ou distrito contam em cada um deles; por isso, nesses painéis a soma pode
             passar de 100%.
           </Item>
+          <Item termo="Padronização">
+            Grafias diferentes da mesma instituição (por exemplo, “UFG” e “Universidade Federal de Goiás”) são
+            unificadas, e a natureza é agrupada em categorias. Valores únicos que não parecem nome de instituição ou
+            de programa são somados em “Outras instituições” ou “Outros programas”.
+          </Item>
           <Item termo="Privacidade">
-            O painel mostra apenas dados agregados, sem nomes, e-mails ou outros dados pessoais.
+            Nomes, e-mails, títulos e anotações da planilha não são publicados: são descartados no computador de
+            quem faz a importação, antes do envio.
           </Item>
         </dl>
 
         <p className="mt-6 rounded-lg bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
-          Critérios em validação: regra de classificação das situações, campo usado no filtro por ano e
+          Critérios em validação com a área responsável: classificação das situações, campo usado nos filtros e
           contagem de pesquisas com mais de uma unidade ou distrito.
         </p>
-        {ficticia && (
-          <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
-            Esta versão é um protótipo: os números exibidos são fictícios.
-          </p>
-        )}
       </div>
     </dialog>
   )
