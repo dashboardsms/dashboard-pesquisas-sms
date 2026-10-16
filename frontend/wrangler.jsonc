@@ -10,9 +10,9 @@
     // Só a API passa pelo Worker; os demais arquivos saem direto dos assets.
     "run_worker_first": ["/api/*"]
   },
-  // Sem "id": o primeiro deploy cria o namespace e os seguintes reaproveitam o mesmo.
-  "kv_namespaces": [{ "binding": "DADOS" }],
+  // Namespace criado pelo wrangler no primeiro deploy; o id fixa os deploys seguintes nele.
+  "kv_namespaces": [{ "binding": "DADOS", "id": "989658aa992445d587e3652f09fb66d1" }],
   // O painel publicado no GitHub Pages chama a API deste Worker a partir de outro domínio.
-  "vars": { "ORIGENS_PERMITIDAS": "https://heldersantosufg.github.io" },
+  "vars": { "ORIGENS_PERMITIDAS": "https://dashboardsms.github.io" },
   "observability": { "enabled": true }
 }

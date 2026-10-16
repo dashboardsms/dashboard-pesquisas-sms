@@ -12,7 +12,7 @@ Público → painel → API devolve os dados publicados
 ## Antes de começar
 
 - **Código no GitHub:** faça commit e push das alterações para a branch `main` (no VS Code: *Source Control → Commit → Sync Changes*).
-- **Acesso ao repositório:** a Cloudflare precisa ser autorizada a ler o repositório `heldersantosufg/dashboard-pesquisas-sms`. Como ele pertence a outra conta, quem administra o repositório precisa aprovar a instalação do aplicativo da Cloudflare no GitHub (ou fazer o passo 2 com a própria conta).
+- **Acesso ao repositório:** a Cloudflare precisa ser autorizada a ler o repositório `dashboardsms/dashboard-pesquisas-sms`. Como ele pertence à organização `dashboardsms`, um administrador da organização precisa aprovar a instalação do aplicativo da Cloudflare no GitHub (ou fazer o passo 2 com a própria conta).
 
 ## 1. Criar a conta na Cloudflare
 
@@ -56,13 +56,13 @@ A senha fica guardada só na Cloudflare: não vai para o GitHub e continua valen
 
 ## 5. Publicar o painel também no GitHub Pages
 
-O workflow `.github/workflows/deploy-pages.yml` publica o painel em <https://heldersantosufg.github.io/dashboard-pesquisas-sms/> a cada push na `main` que mexa em `frontend/`. O Pages só hospeda o site; os dados continuam vindo da API do Worker da Cloudflare.
+O workflow `.github/workflows/deploy-pages.yml` publica o painel em <https://dashboardsms.github.io/dashboard-pesquisas-sms/> a cada push na `main` que mexa em `frontend/`. O Pages só hospeda o site; os dados continuam vindo da API do Worker da Cloudflare.
 
 1. Faça os passos 1 a 3 e copie o endereço do Worker (por exemplo, `https://dashboard-pesquisas-sms.SEU-SUBDOMINIO.workers.dev`).
 2. No GitHub, abra o repositório e vá em *Settings → Secrets and variables → Actions → Variables → New repository variable*. Use o nome `API_URL` e, como valor, o endereço do Worker, sem barra no final.
 3. Em *Actions → Deploy frontend to GitHub Pages*, selecione **Run workflow** para publicar com o novo endereço.
 
-O Worker só aceita chamadas de outros domínios listados em `ORIGENS_PERMITIDAS` (`frontend/wrangler.jsonc`), que já inclui `https://heldersantosufg.github.io`. Sem a variável `API_URL`, o painel no Pages abre, mas mostra "Nenhuma planilha foi importada ainda". A importação também funciona pelo Pages (`/dashboard-pesquisas-sms/importar`), com a mesma senha.
+O Worker só aceita chamadas de outros domínios listados em `ORIGENS_PERMITIDAS` (`frontend/wrangler.jsonc`), que já inclui `https://dashboardsms.github.io`. Sem a variável `API_URL`, o painel no Pages abre, mas mostra "Nenhuma planilha foi importada ainda". A importação também funciona pelo Pages (`/dashboard-pesquisas-sms/importar`), com a mesma senha.
 
 ## Rotina
 

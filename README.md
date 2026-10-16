@@ -69,7 +69,7 @@ Entrega prevista: **15/11/2026**.
 
 ## Publicação
 
-A aplicação roda no plano gratuito da Cloudflare Workers: painel público em `/` e importação da planilha (com senha) em `/importar`. O painel também é publicado no GitHub Pages (<https://heldersantosufg.github.io/dashboard-pesquisas-sms/>), buscando os dados na API do Worker. O passo a passo, feito só pelo navegador, está em [docs/deploy.md](docs/deploy.md).
+A aplicação roda no plano gratuito da Cloudflare Workers: painel público em `/` e importação da planilha (com senha) em `/importar`. O painel também é publicado no GitHub Pages (<https://dashboardsms.github.io/dashboard-pesquisas-sms/>), buscando os dados na API do Worker. O passo a passo, feito só pelo navegador, está em [docs/deploy.md](docs/deploy.md).
 
 ## Estrutura do repositório
 
