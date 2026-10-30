@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   // Deve ser igual ao nome do Worker no painel da Cloudflare.
   "name": "dashboard-pesquisas-sms",
-  "main": "./worker/index.ts",
+  "main": "./worker/index.js",
   "compatibility_date": "2026-10-01",
   "assets": {
     // O painel é uma SPA: rotas como /importar devolvem o index.html.

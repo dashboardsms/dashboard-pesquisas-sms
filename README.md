@@ -64,7 +64,7 @@ Entrega prevista: **15/11/2026**.
 - [Regras de negócio](docs/regras-de-negocio.md)
 - [Pendências para validação](docs/pendencias-validacao.md)
 - [Protótipo e identidade visual](prototipo/README.md)
-- [Aplicação (React + TypeScript + Tailwind + Cloudflare Workers)](frontend/README.md)
+- [Aplicação (React + JavaScript + Tailwind + Cloudflare Workers)](frontend/README.md)
 - [Publicação e importação da planilha](docs/deploy.md)
 
 ## Publicação
