@@ -1,7 +1,9 @@
 import { COLUNAS } from './estrutura.js'
 import { chaveTexto, textoCelula } from './normalizacao.js'
 
-const CABECALHOS_ESPERADOS = COLUNAS.map((coluna) => chaveTexto(coluna.cabecalho))
+const CHAVES_CABECALHO = new Map(COLUNAS.map((coluna) => [chaveTexto(coluna.cabecalho), coluna.campo]))
+/** Colunas que alimentam o painel ou a situação; as descartadas podem faltar na planilha. */
+const OBRIGATORIAS = COLUNAS.filter((coluna) => coluna.uso !== 'descartada')
 /** O cabeçalho pode vir abaixo de algumas linhas de título. */
 const LINHAS_ANTES_DO_CABECALHO = 10
 
@@ -13,33 +15,38 @@ export async function lerPlanilha(arquivo) {
 }
 
 /**
- * Localiza, em cada aba, o cabeçalho idêntico ao do modelo e devolve as linhas
- * seguintes com as 22 colunas exatamente como estão, sem interpretar valores.
- * Abas com outra estrutura são ignoradas e o motivo é registrado.
+ * Localiza, em cada aba, a linha de cabeçalho com as colunas do modelo (pelo
+ * nome, em qualquer ordem) e devolve as linhas seguintes com essas colunas
+ * exatamente como estão, sem interpretar valores. Abas sem as colunas
+ * obrigatórias são ignoradas e o motivo é registrado.
  */
 export function extrairRegistros(abas) {
-  const leitura = { registros: [], abasLidas: [], abasIgnoradas: [], colunasExtras: [] }
+  const leitura = { registros: [], abasLidas: [], abasIgnoradas: [], colunasExtras: [], colunasAusentes: [] }
 
   for (const { nome, linhas } of abas) {
-    const indiceCabecalho = linhas.slice(0, LINHAS_ANTES_DO_CABECALHO).findIndex(cabecalhoConfere)
+    const candidatas = linhas.slice(0, LINHAS_ANTES_DO_CABECALHO).map(localizarColunas)
+    const indiceCabecalho = candidatas.findIndex((posicoes) => OBRIGATORIAS.every((coluna) => posicoes.has(coluna.campo)))
     if (indiceCabecalho === -1) {
-      leitura.abasIgnoradas.push({ nome, motivo: explicarDiferenca(linhas) })
+      leitura.abasIgnoradas.push({ nome, motivo: explicarDiferenca(linhas, candidatas) })
       continue
     }
 
-    linhas[indiceCabecalho].slice(COLUNAS.length).forEach((valor, deslocamento) => {
+    const posicoes = candidatas[indiceCabecalho]
+    const usadas = new Set(posicoes.values())
+    linhas[indiceCabecalho].forEach((valor, indice) => {
       const titulo = textoCelula(celula(valor))
-      if (titulo) leitura.colunasExtras.push(`${letraDaColuna(COLUNAS.length + deslocamento)} “${titulo}” (aba ${nome})`)
+      if (titulo && !usadas.has(indice)) leitura.colunasExtras.push(`${letraDaColuna(indice)} “${titulo}” (aba ${nome})`)
     })
+    for (const coluna of COLUNAS) {
+      if (!posicoes.has(coluna.campo)) leitura.colunasAusentes.push(`“${coluna.cabecalho}” (aba ${nome})`)
+    }
 
     let quantidade = 0
     linhas.slice(indiceCabecalho + 1).forEach((linha, deslocamento) => {
-      const valores = COLUNAS.map((_, indice) => celula(linha[indice]))
+      const valores = COLUNAS.map((coluna) => (posicoes.has(coluna.campo) ? celula(linha[posicoes.get(coluna.campo)]) : null))
       if (valores.every((valor) => valor === null)) return
       leitura.registros.push({
-        ...(Object.fromEntries(COLUNAS.map((coluna, indice) => [coluna.campo, valores[indice]]))
-
-        ),
+        ...Object.fromEntries(COLUNAS.map((coluna, indice) => [coluna.campo, valores[indice]])),
         aba: nome,
         linha: indiceCabecalho + 2 + deslocamento,
       })
@@ -51,26 +58,28 @@ export function extrairRegistros(abas) {
   return leitura
 }
 
-function cabecalhoConfere(linha) {
-  return CABECALHOS_ESPERADOS.every((esperado, indice) => chaveTexto(textoCelula(celula(linha[indice]))) === esperado)
+/** Posição de cada coluna do modelo nesta linha; um cabeçalho repetido vale na primeira vez. */
+function localizarColunas(linha) {
+  const posicoes = new Map()
+  linha.forEach((valor, indice) => {
+    const campo = CHAVES_CABECALHO.get(chaveTexto(textoCelula(celula(valor))))
+    if (campo && !posicoes.has(campo)) posicoes.set(campo, indice)
+  })
+  return posicoes
 }
 
-/** Aponta a primeira coluna diferente do modelo, para o responsável corrigir a planilha. */
-function explicarDiferenca(linhas) {
-  const cabecalho = linhas
-    .slice(0, LINHAS_ANTES_DO_CABECALHO)
-    .find((linha) => linha.some((valor) => celula(valor) !== null))
-  if (!cabecalho) return 'Aba vazia.'
+/** Lista as colunas obrigatórias que faltam, para o responsável corrigir a planilha. */
+function explicarDiferenca(linhas, candidatas) {
+  if (!linhas.slice(0, LINHAS_ANTES_DO_CABECALHO).some((linha) => linha.some((valor) => celula(valor) !== null))) {
+    return 'Aba vazia.'
+  }
+  const melhor = candidatas.reduce((a, b) => (b.size > a.size ? b : a))
+  if (melhor.size === 0) return 'Nenhum cabeçalho do modelo encontrado nas primeiras linhas.'
 
-  const diferentes = COLUNAS.filter(
-    (_, indice) => chaveTexto(textoCelula(celula(cabecalho[indice]))) !== CABECALHOS_ESPERADOS[indice],
-  )
-  const primeira = diferentes[0]
-  const encontrado = textoCelula(celula(cabecalho[COLUNAS.indexOf(primeira)]))
-  const detalhe = `coluna ${primeira.letra} deveria ser “${primeira.cabecalho}”, mas é ${encontrado ? `“${encontrado}”` : 'vazia'}`
-  return diferentes.length === 1
-    ? `Cabeçalho diferente do modelo: ${detalhe}.`
-    : `Cabeçalho diferente do modelo em ${diferentes.length} colunas (a primeira: ${detalhe}).`
+  const faltando = OBRIGATORIAS.filter((coluna) => !melhor.has(coluna.campo)).map((coluna) => `“${coluna.cabecalho}”`)
+  return faltando.length === 1
+    ? `Falta a coluna ${faltando[0]}.`
+    : `Faltam ${faltando.length} colunas: ${faltando.join(', ')}.`
 }
 
 /** Normaliza o valor bruto da célula; textos vazios viram nulo. */

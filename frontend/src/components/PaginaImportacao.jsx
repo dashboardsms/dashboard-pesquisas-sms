@@ -131,7 +131,7 @@ export function PaginaImportacao() {
           )}
           <details className="mt-4 text-sm">
             <summary className="cursor-pointer font-medium text-marca-600 hover:text-marca-700">
-              Estrutura esperada: colunas A a V do modelo
+              Colunas esperadas: localizadas pelo nome do cabeçalho, em qualquer ordem
             </summary>
             <ul className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
               {COLUNAS.map((coluna) => (
@@ -145,8 +145,8 @@ export function PaginaImportacao() {
               ))}
             </ul>
             <p className="mt-3 text-xs text-neutral-500">
-              Painel: alimenta os gráficos. Situação: lida só para classificar a situação. Apoio: usada na leitura, não
-              publicada. Descartada: nunca sai do navegador.
+              A letra é a posição no modelo. Painel: alimenta os gráficos. Situação: lida só para classificar a situação.
+              Apoio: usada na leitura, não publicada. Descartada: nunca sai do navegador e pode faltar na planilha.
             </p>
           </details>
         </Etapa>

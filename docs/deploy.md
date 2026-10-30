@@ -72,7 +72,7 @@ O Worker só aceita chamadas de outros domínios listados em `ORIGENS_PERMITIDAS
 
 ## Formato da planilha
 
-A importação aceita a estrutura de `dados/Registro pesquisas 2026 template.xlsx`: colunas A a V, com os mesmos cabeçalhos e na mesma ordem (maiúsculas, acentos e espaços extras não importam). A página `/importar` lista as colunas e o uso de cada uma.
+A importação aceita a estrutura de `dados/Registro pesquisas 2026 template.xlsx`: os mesmos cabeçalhos, em qualquer ordem (maiúsculas, acentos e espaços extras não importam). As colunas de dados pessoais e anotações internas podem faltar; colunas a mais são ignoradas. A página `/importar` lista as colunas e o uso de cada uma.
 
 Para o painel ficar completo, a planilha precisa:
 

@@ -1,3 +1,4 @@
+import { LIMITE_TEXTO } from '../lib/sanitizarPesquisas.js'
 import { OUTRAS_INSTITUICOES, OUTROS_PROGRAMAS, SITUACOES } from '../types/pesquisa.js'
 import {
   anoDoProtocolo,
@@ -12,7 +13,8 @@ import {
   numeroDoProtocolo,
   pareceInstituicao,
   parecePrograma,
-  separarValores,
+  separarDistritos,
+  separarUnidades,
   situacaoPadronizada,
   textoCelula,
 } from './normalizacao.js'
@@ -27,15 +29,22 @@ export function converterPlanilha(leitura, anoAtual = new Date().getFullYear()) 
   const erros = []
 
   if (leitura.abasLidas.length === 0) {
-    erros.push('Nenhuma aba segue a estrutura do modelo (colunas A a V).')
+    erros.push('Nenhuma aba tem as colunas do modelo (confira os nomes dos cabeçalhos).')
   } else if (leitura.registros.length === 0) {
     erros.push('A planilha não tem nenhum registro de pesquisa abaixo do cabeçalho.')
   }
   if (leitura.colunasExtras.length > 0) {
     avisos.adicionar(
-      'Colunas além da V foram ignoradas',
-      'A importação lê apenas as colunas do modelo.',
+      'Colunas fora do modelo foram ignoradas',
+      'A importação lê apenas as colunas do modelo, localizadas pelo nome do cabeçalho.',
       leitura.colunasExtras,
+    )
+  }
+  if (leitura.colunasAusentes.length > 0) {
+    avisos.adicionar(
+      'Colunas do modelo não encontradas',
+      'Não são usadas no painel; a importação seguiu sem elas.',
+      leitura.colunasAusentes,
     )
   }
 
@@ -53,8 +62,8 @@ export function converterPlanilha(leitura, anoAtual = new Date().getFullYear()) 
     }
     const programa = textoCelula(registro.programa)
     if (programa) programas.registrar(programa)
-    new Set(separarValores(registro.unidadeSaude)).forEach(unidades.registrar)
-    new Set(separarValores(registro.distritoSanitario)).forEach(distritos.registrar)
+    new Set(separarUnidades(registro.unidadeSaude)).forEach(unidades.registrar)
+    new Set(separarDistritos(registro.distritoSanitario).distritos).forEach(distritos.registrar)
   }
 
   const situacoes = Object.fromEntries(SITUACOES.map((s) => [s, { informada: 0, inferida: 0 }]))
@@ -181,9 +190,19 @@ export function converterPlanilha(leitura, anoAtual = new Date().getFullYear()) 
       }
     }
 
-    // Distritos e unidades (podem ser vários, separados por ponto e vírgula)
-    const distritosDaPesquisa = [...new Set(separarValores(registro.distritoSanitario).map(distritos.canonico))]
-    const nomesUnidades = [...new Set(separarValores(registro.unidadeSaude).map(unidades.canonico))]
+    // Distritos e unidades (podem ser vários na mesma célula)
+    const leituraDistritos = separarDistritos(registro.distritoSanitario)
+    if (!leituraDistritos.reconhecidos) {
+      avisos.adicionar('Distrito sanitário fora da lista', 'Publicado como escrito na planilha.', [
+        `${onde} — “${textoCelula(registro.distritoSanitario)}”`,
+      ])
+    }
+    const distritosDaPesquisa = [
+      ...new Set(leituraDistritos.distritos.map((nome) => limitar(distritos.canonico(nome), onde, avisos))),
+    ]
+    const nomesUnidades = [
+      ...new Set(separarUnidades(registro.unidadeSaude).map((nome) => limitar(unidades.canonico(nome), onde, avisos))),
+    ]
     const unidadesDaPesquisa = nomesUnidades.map((nome, indice) => ({
       nome,
       distrito:
@@ -199,8 +218,8 @@ export function converterPlanilha(leitura, anoAtual = new Date().getFullYear()) 
       mes: periodo.mes,
       situacao,
       situacaoInformada: padronizada !== null,
-      instituicao,
-      programa,
+      instituicao: instituicao && limitar(instituicao, onde, avisos),
+      programa: programa && limitar(programa, onde, avisos),
       natureza,
       distritos: distritosDaPesquisa,
       unidades: unidadesDaPesquisa,
@@ -280,6 +299,16 @@ function removerDuplicados(registros, avisos) {
     const protocolo = chaveProtocolo(registro)
     return !protocolo || ultimoPorProtocolo.get(protocolo) === registro
   })
+}
+
+/** A API recusa textos longos demais; o excesso é cortado aqui, com aviso, para não barrar a publicação. */
+function limitar(texto, onde, avisos) {
+  if (texto.length <= LIMITE_TEXTO) return texto
+  const cortado = `${texto.slice(0, LIMITE_TEXTO - 1).trimEnd()}…`
+  avisos.adicionar('Texto longo demais, cortado', `O painel aceita até ${LIMITE_TEXTO} caracteres por valor.`, [
+    `${onde} — “${cortado}”`,
+  ])
+  return cortado
 }
 
 /** "03/2026 Cancelada" e "3/2026" são o mesmo protocolo. */

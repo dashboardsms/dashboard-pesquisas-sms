@@ -1,7 +1,8 @@
 /**
  * Colunas da planilha "Registro pesquisas", na ordem exata do modelo
- * (dados/Registro pesquisas 2026 template.xlsx). A importação só aceita abas
- * com estes cabeçalhos nesta ordem; maiúsculas, acentos e espaços extras não importam.
+ * (dados/Registro pesquisas 2026 template.xlsx). A importação localiza cada coluna
+ * pelo cabeçalho, em qualquer ordem; maiúsculas, acentos e espaços extras não importam.
+ * As colunas descartadas podem faltar; as demais são obrigatórias.
  *
  * Uso de cada coluna:
  * - painel: alimenta os indicadores e gráficos;

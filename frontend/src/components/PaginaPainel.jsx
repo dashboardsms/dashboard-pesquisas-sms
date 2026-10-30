@@ -149,7 +149,7 @@ function Conteudo({ indicadores: i, filtros, anos, distritoPorUnidade, aoMudarEs
           <Painel
             className="xl:col-span-3"
             titulo="Unidade de saúde"
-            descricao="Coluna “Unidade de Saúde”. Para registrar mais de uma unidade na mesma pesquisa, separe os nomes por ponto e vírgula; a pesquisa conta em cada unidade, por isso a soma das proporções pode passar de 100%."
+            descricao="Coluna “Unidade de Saúde”. Várias unidades na mesma célula (separadas por ponto e vírgula, vírgula ou “e”) contam cada uma; por isso a soma das proporções pode passar de 100%. O distrito vem da coluna “Distrito Sanitário” quando dá para associá-lo a cada unidade."
           >
             <TabelaDistribuicao
               itens={i.porUnidade.itens}
@@ -188,7 +188,7 @@ function Conteudo({ indicadores: i, filtros, anos, distritoPorUnidade, aoMudarEs
           <PainelDistribuicao
             className="xl:col-span-2"
             titulo="Distrito sanitário"
-            descricao="Coluna “Distrito Sanitário”. Uma pesquisa com unidades em mais de um distrito conta em cada um deles; por isso, a soma pode passar de 100%."
+            descricao="Coluna “Distrito Sanitário”. Uma pesquisa em mais de um distrito (por exemplo, “Sul, Noroeste e Oeste”) conta em cada um deles; por isso, a soma pode passar de 100%. “Todos” na planilha aparece como “Todos os distritos”, e “Gestão Central” reúne os serviços da administração central."
             rotuloCategoria="Distrito sanitário"
             grafico="colunas"
             distribuicao={i.porDistrito}

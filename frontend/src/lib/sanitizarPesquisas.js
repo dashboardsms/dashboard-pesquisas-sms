@@ -4,7 +4,7 @@ import { NATUREZAS, SITUACOES } from '../types/pesquisa.js'
 // conhecidos, para que nada além deles chegue à base pública.
 
 const LIMITE_PESQUISAS = 20_000
-const LIMITE_TEXTO = 200
+export const LIMITE_TEXTO = 200
 const LIMITE_LISTA = 50
 
 export function sanitizarPesquisas(dado) {
@@ -64,5 +64,5 @@ function textoOuNulo(valor) {
 }
 
 function inteiroOuNulo(valor, minimo, maximo) {
-  return valor === null || (Number.isInteger(valor) && (valor) >= minimo && (valor) <= maximo)
+  return valor === null || (Number.isInteger(valor) && valor >= minimo && valor <= maximo)
 }

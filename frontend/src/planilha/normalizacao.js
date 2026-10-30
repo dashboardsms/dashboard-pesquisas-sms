@@ -1,3 +1,5 @@
+import { TODOS_DISTRITOS } from '../types/pesquisa.js'
+
 /** Texto da célula em uma linha só; datas viram DD/MM/AAAA. */
 export function textoCelula(valor) {
   if (valor === null) return ''
@@ -25,6 +27,100 @@ export function separarValores(valor) {
     .split(/[;\n\r]+/)
     .map((parte) => parte.replace(/\s+/g, ' ').trim())
     .filter(Boolean)
+}
+
+// ---------------------------------------------------------------------------
+// Distritos e unidades
+
+/** Distritos sanitários de Goiânia e os demais valores aceitos na coluna, pela chave do texto. */
+const DISTRITOS = new Map([
+  ['campinas centro', 'Campinas-Centro'],
+  ['campinas', 'Campinas-Centro'],
+  ['leste', 'Leste'],
+  ['noroeste', 'Noroeste'],
+  ['norte', 'Norte'],
+  ['oeste', 'Oeste'],
+  ['sudoeste', 'Sudoeste'],
+  ['sul', 'Sul'],
+  ['gestao central', 'Gestão Central'],
+  ['todos', TODOS_DISTRITOS],
+  ['todos os distritos', TODOS_DISTRITOS],
+])
+
+function distritoConhecido(texto) {
+  return DISTRITOS.get(chaveTexto(texto).replace(/^(distrito sanitario|distrito|ds) /, '')) ?? null
+}
+
+/**
+ * Distritos de uma célula como "Sul, Noroeste e Oeste" ou "Campinas Centro e
+ * Sudoeste", com os nomes padronizados. Quando algum trecho não é um distrito
+ * conhecido, a célula é separada só por ponto e vírgula e `reconhecidos` é falso.
+ */
+export function separarDistritos(valor) {
+  const trechos = separarValores(valor)
+    .flatMap((parte) => parte.split(/\s*[,/]\s*|\s+e\s+/i))
+    .map((parte) => parte.replace(/[.\s]+$/, ''))
+    .filter(Boolean)
+  const conhecidos = trechos.map(distritoConhecido)
+  if (conhecidos.every(Boolean)) return { distritos: [...new Set(conhecidos)], reconhecidos: true }
+  return { distritos: separarValores(valor), reconhecidos: false }
+}
+
+/** Tipos de serviço que abrem o nome de uma unidade, como em "CAIS Finsocial e CAIS Cândida de Morais". */
+const INICIO_DE_UNIDADE =
+  /^(CAIS|CAPS\w*|CIAMS|CSF|USF|UBS|UPA|ESF|CEREST|SAMU|Hospita(l|is)|Maternidades?|Centros?|Unidades?|Pronto|Policl[íi]nica|Ambulat[óo]rio|Servi[çc]o|Sistema|Escola|Diretoria|Coordena[çc][ãa]o|Ger[êe]ncia|Laborat[óo]rio)\b/i
+
+/**
+ * Unidades de uma célula. Além de ponto e vírgula e quebra de linha, separa por
+ * vírgula seguida de maiúscula e por " e " antes de um tipo de serviço, sempre
+ * fora de parênteses. "Hospital e Maternidade Dona Iris" e "Hospital Municipal
+ * da Mulher e Maternidade Célia Câmara" continuam inteiros.
+ */
+export function separarUnidades(valor) {
+  return separarValores(valor)
+    .flatMap(dividirUnidades)
+    .map((nome) => nome.replace(/[\s.,;]+$/, ''))
+    .filter(Boolean)
+    .map((nome) => unidadeConhecida(nome) ?? nome)
+}
+
+/** Unidades escritas de várias formas na planilha e o nome padronizado. */
+const UNIDADES = [
+  [/celia camara/, 'Hospital e Maternidade Municipal Célia Câmara'],
+  [/dona iris/, 'Hospital e Maternidade Dona Íris'],
+  [/nascer cidadao/, 'Maternidade Nascer Cidadão'],
+]
+
+function unidadeConhecida(texto) {
+  const chave = chaveTexto(texto)
+  return UNIDADES.find(([padrao]) => padrao.test(chave))?.[1] ?? null
+}
+
+function dividirUnidades(texto) {
+  const partes = []
+  let inicio = 0
+  let profundidade = 0
+  for (let indice = 0; indice < texto.length; indice++) {
+    const caractere = texto[indice]
+    if (caractere === '(') profundidade += 1
+    else if (caractere === ')') profundidade = Math.max(0, profundidade - 1)
+    if (profundidade > 0) continue
+
+    const resto = texto.slice(indice)
+    const separador = resto.match(/^,\s*(?=\p{Lu})/u) ?? resto.match(/^\s+e\s+/)
+    if (!separador) continue
+    const seguinte = resto.slice(separador[0].length)
+    const atual = texto.slice(inicio, indice).trim()
+    if (separador[0].trim() === 'e') {
+      if (!INICIO_DE_UNIDADE.test(seguinte)) continue
+      if (/^hospita/i.test(atual) && /^maternidade/i.test(seguinte)) continue
+    }
+    partes.push(atual)
+    inicio = indice + separador[0].length
+    indice = inicio - 1
+  }
+  partes.push(texto.slice(inicio).trim())
+  return partes
 }
 
 // ---------------------------------------------------------------------------

@@ -8,7 +8,7 @@ Painel público e importação da planilha, em React (JavaScript) + Tailwind CSS
 
 ## Como os dados fluem
 
-1. Em `/importar`, o navegador lê o `.xlsx` (`src/planilha/lerPlanilha.js`). Cada aba precisa ter exatamente as colunas A a V do modelo (`src/planilha/estrutura.js`).
+1. Em `/importar`, o navegador lê o `.xlsx` (`src/planilha/lerPlanilha.js`). Cada aba precisa ter as colunas do modelo (`src/planilha/estrutura.js`), localizadas pelo nome do cabeçalho em qualquer ordem.
 2. `src/planilha/converterPlanilha.js` transforma cada linha em uma pesquisa publicável:
    - padroniza IES, natureza e programa;
    - classifica a situação;

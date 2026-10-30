@@ -39,3 +39,4 @@ export const NATUREZAS = [
 /** Categorias que reúnem valores agrupados na importação ou somados nos gráficos. */
 export const OUTRAS_INSTITUICOES = 'Outras instituições'
 export const OUTROS_PROGRAMAS = 'Outros programas'
+export const TODOS_DISTRITOS = 'Todos os distritos'
