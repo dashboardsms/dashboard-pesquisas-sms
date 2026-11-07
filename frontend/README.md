@@ -16,7 +16,9 @@ Painel público e importação da planilha, em React (JavaScript) + Tailwind CSS
    - descarta nomes, e-mails, títulos e anotações.
    As regras ficam em `src/planilha/normalizacao.js`.
 3. O relatório mostra erros e avisos por linha. Com a senha, as pesquisas são enviadas à API (`worker/index.js`). A API filtra os campos de novo (`src/lib/sanitizarPesquisas.js`) e grava no KV.
-4. O painel (`src/components/PaginaPainel.jsx`) busca a base e calcula os indicadores (`src/lib/indicadores.js`) conforme os filtros de ano, mês e escopo.
+4. O painel (`src/components/PaginaPainel.jsx`) busca a base e calcula os indicadores (`src/lib/indicadores.js`) conforme os filtros de ano, mês e escopo. Com a aba visível, ele busca a base de novo a cada minuto (`src/hooks/useBaseDePesquisas.js`) e se atualiza sem recarregar a página.
+
+A planilha também pode chegar pela sincronização com o Google Sheets (`../src/`, rodando no GitHub Actions). Ela usa os mesmos passos 2 e 3, sem o navegador; veja [docs/sincronizacao.md](../docs/sincronizacao.md).
 
 ## Estrutura
 
@@ -38,7 +40,7 @@ frontend/
 
 ```bash
 npm install
-echo "SENHA_IMPORTACAO=uma-senha-local" > .dev.vars   # senha usada em /importar
+cp ../.env.example .dev.vars   # preencha SENHA_IMPORTACAO (senha usada em /importar)
 npm run dev      # painel + API + KV simulado em http://localhost:5173
 npm run build    # gera dist/ (o mesmo build que roda na Cloudflare)
 npm run lint

@@ -64,15 +64,19 @@ O workflow `.github/workflows/deploy-pages.yml` publica o painel em <https://das
 
 O Worker só aceita chamadas de outros domínios listados em `ORIGENS_PERMITIDAS` (`frontend/wrangler.jsonc`), que já inclui `https://dashboardsms.github.io`. Sem a variável `API_URL`, o painel no Pages abre, mas mostra "Nenhuma planilha foi importada ainda". A importação também funciona pelo Pages (`/dashboard-pesquisas-sms/importar`), com a mesma senha.
 
+## 6. Sincronizar com o Google Sheets (opcional)
+
+Se a planilha é mantida no Google Sheets, o painel pode acompanhá-la sozinho, sem importações: um workflow do GitHub confere a planilha a cada 5 minutos e publica pela mesma API do passo 4 quando algo muda. A configuração (compartilhamento da planilha e dois secrets no GitHub) e os testes estão em [sincronizacao.md](sincronizacao.md).
+
 ## Rotina
 
-- **Atualizar os dados:** repita o passo 4 com a planilha nova. Cada importação **substitui** todos os dados publicados, então a planilha deve conter todas as pesquisas que devem aparecer (em uma ou mais abas com o cabeçalho do modelo).
+- **Atualizar os dados:** com a sincronização (passo 6), basta editar a planilha no Google Sheets. Sem ela, repita o passo 4 com a planilha nova. Cada importação **substitui** todos os dados publicados, então a planilha deve conter todas as pesquisas que devem aparecer (em uma ou mais abas com o cabeçalho do modelo).
 - **Mudar o código:** commit e push na `main`; a Cloudflare faz o build e publica sozinha. Os dados importados e a senha são mantidos.
 - **Divulgar no site da SMS:** use um link para o endereço do Worker. Um domínio próprio pode ser configurado em *Settings → Domains & Routes*, mas exige que o DNS do domínio esteja na Cloudflare.
 
 ## Formato da planilha
 
-A importação aceita a estrutura de `dados/Registro pesquisas 2026 template.xlsx`: os mesmos cabeçalhos, em qualquer ordem (maiúsculas, acentos e espaços extras não importam). As colunas de dados pessoais e anotações internas podem faltar; colunas a mais são ignoradas. A página `/importar` lista as colunas e o uso de cada uma.
+A importação aceita a estrutura de `docs/dados/Registro pesquisas 2026 template.xlsx`: os mesmos cabeçalhos, em qualquer ordem (maiúsculas, acentos e espaços extras não importam). As colunas de dados pessoais e anotações internas podem faltar; colunas a mais são ignoradas. A página `/importar` lista as colunas e o uso de cada uma.
 
 Para o painel ficar completo, a planilha precisa:
 
@@ -83,10 +87,10 @@ Para o painel ficar completo, a planilha precisa:
 
 | Recurso | Limite | Uso deste painel |
 |---|---|---|
-| Requisições à API | 100 mil por dia | 1 por visita ao painel |
+| Requisições à API | 100 mil por dia | 1 por minuto com o painel aberto e visível; a sincronização faz mais 288 por dia |
 | Arquivos do painel (HTML, JS, CSS) | ilimitados | — |
-| Leituras do KV | 100 mil por dia | 1 por visita |
-| Gravações do KV | mil por dia | 1 por importação |
+| Leituras do KV | 100 mil por dia | 1 por requisição à API |
+| Gravações do KV | mil por dia | 1 por importação ou por sincronização com mudança |
 | Tamanho de um valor no KV | 25 MiB | cerca de 11 KB para 50 pesquisas |
 
 ## Problemas comuns

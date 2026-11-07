@@ -29,8 +29,8 @@ export function DialogoSobreDados({ ref, atualizadoEm }) {
 
         <dl className="mt-4 space-y-4 text-sm leading-relaxed">
           <Item termo="Fonte">
-            Planilha de registro de pesquisas mantida pela Escola, importada periodicamente pelo responsável pelo
-            painel.{atualizadoEm && ` Última importação em ${formatarData(atualizadoEm)}.`}
+            Planilha de registro de pesquisas mantida pela Escola, sincronizada automaticamente com o painel ou
+            importada pelo responsável.{atualizadoEm && ` Última atualização em ${formatarData(atualizadoEm)}.`}
           </Item>
           <Item termo="Situação das pesquisas">
             Quando a coluna “Situação” traz um valor padronizado (Em análise, Em execução, Finalizada ou
