@@ -17,7 +17,12 @@ Do salvamento na planilha até o painel, o tempo costuma ficar entre 5 e 15 minu
 
 Faça antes os passos de [deploy.md](deploy.md): a sincronização publica no mesmo Worker, com a mesma senha.
 
-1. **Compartilhar a planilha:** no Google Sheets, selecione *Compartilhar → Acesso geral → Qualquer pessoa com o link* e mantenha o papel *Leitor*. Em *Arquivo → Configurações*, a localidade deve ser *Brasil*, para as datas saírem como DD/MM/AAAA.
+1. **Compartilhar a planilha:** no Google Sheets, abra *Compartilhar*:
+   - em *Acesso geral*, escolha *Qualquer pessoa com o link* com o papel **Leitor**, nunca *Editor*. A sincronização lê a planilha por esse acesso, e quem tem só o link consegue ver, mas não editar;
+   - em *Pessoas com acesso*, deixe como **Editor** quem pode atualizar o painel. Todos os editores e o proprietário atualizam o painel ao editar a planilha. Para dar ou tirar essa permissão, adicione ou remova a pessoa aqui;
+   - na engrenagem do diálogo, mantenha marcada a opção *Leitores e comentaristas podem ver a opção de fazer download, imprimir e copiar*. Sem ela, a sincronização não consegue baixar a planilha.
+
+   Em *Arquivo → Configurações*, a localidade deve ser *Brasil*, para as datas saírem como DD/MM/AAAA. Se algo for alterado por engano, *Arquivo → Histórico de versões* mostra quem mudou o quê e permite restaurar uma versão anterior; a sincronização seguinte publica a versão restaurada.
 2. **Cadastrar os secrets no GitHub:** no repositório, abra *Settings → Secrets and variables → Actions → Secrets → New repository secret* e crie:
 
    | Nome | Valor |
@@ -63,7 +68,7 @@ node --env-file=frontend/.dev.vars src/sincronizar.js   # terminal 2, na raiz do
 | `Sem mudanças: …` | a planilha não mudou desde a última publicação; nada foi gravado |
 | `Sincronização desligada: URL_PLANILHA não foi configurada.` | falta o secret `URL_PLANILHA`; a execução termina sem erro |
 | `Aviso da planilha: <tipo> (n)` | os mesmos avisos do relatório do `/importar`. O log mostra só o tipo e a quantidade, porque é público; para ver as linhas, baixe a planilha como `.xlsx` e confira em `/importar` |
-| `Sincronização falhou: A planilha não está acessível …` | a planilha não está compartilhada por link (passo 1) |
+| `Sincronização falhou: A planilha não está acessível …` | a planilha não está compartilhada por link como Leitor, ou o download para leitores foi desativado (passo 1) |
 | `Sincronização falhou: Planilha não encontrada …` | o link em `URL_PLANILHA` está errado ou a planilha foi apagada |
 | `Sincronização falhou: Senha incorreta.` | `SENHA_IMPORTACAO` do GitHub difere da do Worker |
 | `Sincronização falhou: Não foi possível acessar o Google Sheets …` | instabilidade de rede; a próxima execução tenta de novo |

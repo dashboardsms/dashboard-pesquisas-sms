@@ -17,7 +17,7 @@ flowchart TB
         kv[("<b>Base publicada</b><br/>[Contêiner: Cloudflare KV]<br/><br/>atualizadoEm e pesquisas, sem dados pessoais")]
     end
 
-    escola -- "Edita a planilha<br/>[navegador]" --> sheets
+    escola -- "Edita a planilha como Editor<br/>[navegador, conta Google]" --> sheets
     escola -- "Importa um .xlsx (opcional)<br/>[HTTPS]" --> painel
     usuario -- "Consulta os indicadores<br/>[HTTPS]" --> painel
     sincronizador -- "Baixa a planilha em CSV<br/>[HTTPS]" --> sheets
@@ -42,6 +42,16 @@ Legenda: azul-escuro, pessoas; azul, contêineres do sistema; cinza, sistema ext
 | API | `frontend/worker/index.js` | Cloudflare Workers, plano gratuito |
 | Base publicada | — | Cloudflare KV (`DADOS`), um único valor JSON |
 | Sincronizador | `src/` | GitHub Actions (`.github/workflows/sincronizar-planilha.yml`) |
+
+### Quem pode alterar o painel
+
+| Caminho | Quem consegue | Como controlar |
+|---|---|---|
+| Editar a planilha (sincronização) | o proprietário e as pessoas adicionadas como Editor; quem tem só o link entra como Leitor e não edita | *Compartilhar*, no Google Sheets; o *Histórico de versões* mostra quem mudou o quê |
+| Importar em `/importar` | quem tem a senha de importação | secret `SENHA_IMPORTACAO` na Cloudflare e no GitHub |
+| Rodar a sincronização à mão (*Run workflow*) | quem tem acesso de escrita ao repositório | permissões do repositório no GitHub; a execução só republica o que já está na planilha |
+
+Quem tem o link consegue ver a planilha inteira, inclusive nomes e e-mails, por isso ele fica só no secret `URL_PLANILHA`. Para esconder também a leitura seria preciso restringir o acesso geral e ler a planilha com uma conta de serviço do Google, o que hoje não é feito.
 
 A conversão da planilha é a mesma nos dois caminhos de entrada: `frontend/src/planilha/` padroniza os valores e descarta nomes, e-mails, títulos e anotações antes de qualquer envio. A API confere o formato de novo (`frontend/src/lib/sanitizarPesquisas.js`) antes de gravar.
 
