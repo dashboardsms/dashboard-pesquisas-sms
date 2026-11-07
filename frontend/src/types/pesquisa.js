@@ -32,8 +32,10 @@ export const NATUREZAS = [
  * - distritos: lista de nomes;
  * - unidades: lista de { nome, distrito }, com distrito nulo quando não se sabe.
  *
- * A base publicada é { atualizadoEm: 'AAAA-MM-DD', pesquisas: [...] }; o formato é
- * conferido em src/lib/sanitizarPesquisas.js antes de gravar.
+ * A base publicada é { atualizadoEm, pesquisas: [...] }; o formato das pesquisas é
+ * conferido em src/lib/sanitizarPesquisas.js antes de gravar. `atualizadoEm` é o instante
+ * da publicação em ISO 8601 ('2026-11-07T18:32:10.123Z'); bases gravadas antes de a API
+ * registrar a hora trazem só a data ('AAAA-MM-DD').
  */
 
 /** Categorias que reúnem valores agrupados na importação ou somados nos gráficos. */

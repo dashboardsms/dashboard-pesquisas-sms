@@ -12,7 +12,7 @@ import {
 import { useState } from 'react'
 import { publicarPesquisas } from '../data/api.js'
 import { useBaseDePesquisas } from '../hooks/useBaseDePesquisas.js'
-import { formatarData, formatarNumero, pluralizar } from '../lib/formatacao.js'
+import { formatarDataHora, formatarNumero, pluralizar } from '../lib/formatacao.js'
 import { ROTA_PAINEL } from '../lib/rotas.js'
 import { converterPlanilha } from '../planilha/converterPlanilha.js'
 import { COLUNAS } from '../planilha/estrutura.js'
@@ -85,7 +85,7 @@ export function PaginaImportacao() {
         <h1 className="text-2xl font-semibold text-neutral-900">Importar planilha</h1>
         <p className="mt-2 text-sm text-neutral-600">
           {atual
-            ? `Base publicada hoje no painel: ${pluralizar(atual.pesquisas.length, 'pesquisa', 'pesquisas')}, importada em ${formatarData(atual.atualizadoEm)}. A nova importação substitui todos esses dados.`
+            ? `Base publicada hoje no painel: ${pluralizar(atual.pesquisas.length, 'pesquisa', 'pesquisas')}, de ${formatarDataHora(atual.atualizadoEm)}. A nova importação substitui todos esses dados.`
             : 'Ainda não há dados publicados no painel.'}
         </p>
         <p className="mt-3 flex gap-2 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900 ring-1 ring-emerald-200">
@@ -194,7 +194,7 @@ export function PaginaImportacao() {
             <div aria-live="polite">
               {publicacao.status === 'publicada' && (
                 <Alerta tipo="sucesso">
-                  Dados publicados em {formatarData(publicacao.atualizadoEm)}:{' '}
+                  Dados publicados em {formatarDataHora(publicacao.atualizadoEm)}:{' '}
                   {pluralizar(publicacao.pesquisas, 'pesquisa', 'pesquisas')}.{' '}
                   <a href={ROTA_PAINEL} className="font-semibold underline underline-offset-2">
                     Ver o painel atualizado

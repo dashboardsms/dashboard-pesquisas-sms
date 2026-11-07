@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { formatarData } from '../lib/formatacao.js'
+import { formatarDataHora } from '../lib/formatacao.js'
 
 /** Diálogo nativo (`showModal`): Esc e o botão fecham; clique fora também. */
 export function DialogoSobreDados({ ref, atualizadoEm }) {
@@ -30,7 +30,7 @@ export function DialogoSobreDados({ ref, atualizadoEm }) {
         <dl className="mt-4 space-y-4 text-sm leading-relaxed">
           <Item termo="Fonte">
             Planilha de registro de pesquisas mantida pela Escola, sincronizada automaticamente com o painel ou
-            importada pelo responsável.{atualizadoEm && ` Última atualização em ${formatarData(atualizadoEm)}.`}
+            importada pelo responsável.{atualizadoEm && ` Última atualização em ${formatarDataHora(atualizadoEm)}.`}
           </Item>
           <Item termo="Situação das pesquisas">
             Quando a coluna “Situação” traz um valor padronizado (Em análise, Em execução, Finalizada ou

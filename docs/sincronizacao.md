@@ -35,9 +35,9 @@ O link da planilha fica só no secret. Quem tem o link vê a planilha inteira, i
 ### Na produção
 
 1. **Rodar na hora:** em *Actions → Sincronizar planilha do Google Sheets*, selecione **Run workflow**. Abra a execução e o passo *Sincronizar*:
-   - na primeira vez, aparece `Painel atualizado: N pesquisas publicadas (base de AAAA-MM-DD).`;
+   - na primeira vez, aparece `Painel atualizado: N pesquisas publicadas em <data e hora>.` (em UTC, como todo o log do Actions);
    - nas seguintes, sem edição na planilha, aparece `Sem mudanças: o painel já mostra as N pesquisas da planilha.`
-2. **Conferir os dados publicados:** abra `<API_URL>/api/dados` no navegador. O campo `atualizadoEm` traz a data da última publicação, e a lista `pesquisas` deve ter o mesmo número do log.
+2. **Conferir os dados publicados:** abra `<API_URL>/api/dados` no navegador. O campo `atualizadoEm` traz a data e a hora (UTC) da última publicação, e a lista `pesquisas` deve ter o mesmo número do log. No painel, a mesma data e hora aparece no cabeçalho, no horário de Brasília.
 3. **Testar uma edição:** abra o painel e deixe a aba visível. Na planilha, altere um valor que apareça no painel, como o distrito de uma pesquisa. Rode o workflow de novo ou espere a próxima execução agendada: o log mostra `Painel atualizado`, e em até 1 minuto o painel aberto muda sozinho. Desfaça a edição e repita para voltar ao estado anterior.
 4. **Acompanhar:** a aba *Actions* lista cada execução. Verde significa que a sincronização rodou, publicando ou não; vermelho significa falha, com o motivo no log.
 

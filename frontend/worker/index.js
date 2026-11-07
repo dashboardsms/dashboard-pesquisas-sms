@@ -68,7 +68,8 @@ async function publicarBase(request, env) {
   const resultado = sanitizarPesquisas(dado)
   if ('erro' in resultado) return json({ erro: resultado.erro }, 422)
 
-  const base = { atualizadoEm: hojeEmBrasilia(), pesquisas: resultado.pesquisas }
+  // Instante da publicação (ISO 8601, UTC); o painel mostra data e hora no horário de Brasília.
+  const base = { atualizadoEm: new Date().toISOString(), pesquisas: resultado.pesquisas }
   await env.DADOS.put(CHAVE_BASE, JSON.stringify(base))
   return json({ atualizadoEm: base.atualizadoEm, pesquisas: base.pesquisas.length })
 }
@@ -90,11 +91,6 @@ async function senhasIguais(informada, esperada) {
     [informada, esperada].map((texto) => crypto.subtle.digest('SHA-256', codificador.encode(texto))),
   )
   return crypto.subtle.timingSafeEqual(a, b)
-}
-
-function hojeEmBrasilia() {
-  // en-CA formata como AAAA-MM-DD.
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date())
 }
 
 function json(corpo, status = 200, cabecalhos = {}) {

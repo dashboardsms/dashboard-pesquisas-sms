@@ -42,7 +42,7 @@ async function sincronizar() {
   }
 
   const publicacao = await publicar(urlDados, planilha.pesquisas)
-  console.log(`Painel atualizado: ${publicacao.pesquisas} pesquisas publicadas (base de ${publicacao.atualizadoEm}).`)
+  console.log(`Painel atualizado: ${publicacao.pesquisas} pesquisas publicadas em ${publicacao.atualizadoEm}.`)
 }
 
 /** Base publicada hoje, ou `null` se nenhuma planilha foi importada ainda. */

@@ -17,9 +17,28 @@ export function formatarPercentual(fracao) {
 }
 
 /** AAAA-MM-DD → DD/MM/AAAA, sem passar por Date (evita deslocamento de fuso). */
-export function formatarData(iso) {
+function formatarData(iso) {
   const [ano, mes, dia] = iso.split('-')
   return `${dia}/${mes}/${ano}`
+}
+
+const dataHoraBrasilia = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: 'America/Sao_Paulo',
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+})
+
+/**
+ * Instante da publicação (ISO 8601) → "07/11/2026 às 15:32", no horário de Brasília.
+ * Bases gravadas antes de a API registrar a hora trazem só AAAA-MM-DD e saem sem ela.
+ */
+export function formatarDataHora(iso) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return formatarData(iso)
+  const partes = Object.fromEntries(dataHoraBrasilia.formatToParts(new Date(iso)).map(({ type, value }) => [type, value]))
+  return `${partes.day}/${partes.month}/${partes.year} às ${partes.hour}:${partes.minute}`
 }
 
 export function pluralizar(quantidade, singular, plural) {

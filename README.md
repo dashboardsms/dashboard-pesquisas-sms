@@ -68,6 +68,7 @@ Entrega prevista: **15/11/2026**.
 - [Aplicação (React + JavaScript + Tailwind + Cloudflare Workers)](frontend/README.md)
 - [Publicação e importação da planilha](docs/deploy.md)
 - [Sincronização com o Google Sheets](docs/sincronizacao.md)
+- [Arquitetura (diagrama de contêineres C4) e atualização dos dados](docs/arquitetura.md)
 
 ## Publicação
 
@@ -99,6 +100,7 @@ dashboard-pesquisas-sms/
 │   ├── pendencias-validacao.md
 │   ├── deploy.md
 │   ├── sincronizacao.md
+│   ├── arquitetura.md
 │   ├── dados/         # modelo da planilha
 │   ├── diagramas/     # BPMN e caso de uso
 │   └── prototipo/     # identidade visual

@@ -1,5 +1,5 @@
 import { Microscope } from 'lucide-react'
-import { formatarData } from '../lib/formatacao.js'
+import { formatarDataHora } from '../lib/formatacao.js'
 import { ROTA_PAINEL } from '../lib/rotas.js'
 
 export function Cabecalho({ atualizadoEm, children }) {
@@ -25,7 +25,7 @@ export function Cabecalho({ atualizadoEm, children }) {
           <p className="text-xs text-marca-100 sm:ml-auto">
             Dados atualizados em{' '}
             <time dateTime={atualizadoEm} className="font-semibold text-white">
-              {formatarData(atualizadoEm)}
+              {formatarDataHora(atualizadoEm)}
             </time>
           </p>
         )}
